@@ -150,8 +150,6 @@
       if (window.ahavaTrack) window.ahavaTrack('quiz_done');
     };
     const next = () => {
-      const k = steps[i].dataset.step;
-      if (k === 'safe' && val('safe') === 'yes') { hideAll(); nav.hidden = true; scr('crisis').hidden = false; scr('crisis').focus(); progress(i); return; }
       if (i + 1 < steps.length) show(i + 1); else result();
     };
     form.addEventListener('submit', e => e.preventDefault());
@@ -161,10 +159,8 @@
       inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); inp.checked = true; next(); } });
     }));
     $('[data-prev]', quiz).addEventListener('click', () => {
-      if (!scr('crisis').hidden) return show(i);
       if (i > 0) show(i - 1); else { showIntro(); nav.hidden = true; progress(0); }
     });
-    $$('[data-back]', quiz).forEach(b => b.addEventListener('click', () => { const r = $('input[name=safe][value=yes]', form); if (r) r.checked = false; show(i); }));
     $('[data-restart]', quiz).addEventListener('click', () => { form.reset(); showIntro(); nav.hidden = true; progress(0); $('[data-start]', quiz).focus(); });
     $('[data-r-book]', quiz).addEventListener('click', e => {
       const href = e.currentTarget.getAttribute('href');
