@@ -547,3 +547,16 @@ a:hover{color:var(--c-ink)}
 
 .quiz__intro.is-collapsed>:not(h1){display:none}
 .quiz__intro.is-collapsed h1{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+/* hero card is a link to the free call */
+a.hero__card{color:var(--c-ink);text-decoration:none;border:1.5px solid transparent;transition:translate 220ms var(--ease-state),box-shadow 220ms var(--ease-state),border-color 220ms var(--ease-state)}
+a.hero__card:hover{translate:0 -3px;border-color:var(--c-cta);box-shadow:0 4px 8px rgba(36,28,69,.08),0 22px 52px rgba(36,28,69,.18);color:var(--c-ink)}
+.hero__card-text{display:block}
+.hero__card-text strong{display:block;font-family:var(--f-display);font-weight:600;font-size:1rem}
+.hero__card-text span{color:var(--c-muted)}
+.hero__card-go{flex:none;width:32px;height:32px;border-radius:50%;background:var(--c-cta);color:var(--c-ink);display:grid;place-items:center;transition:translate 220ms var(--ease-state)}
+a.hero__card:hover .hero__card-go{translate:3px 0}
+a.hero__card:focus-visible{outline:3px solid var(--c-focus);outline-offset:3px}
+a.hero__card .hero__card-text{color:var(--c-ink)}
+a.hero__card .hero__card-text strong{color:var(--c-ink)}
+a.hero__card .hero__card-go{color:var(--c-ink)}
