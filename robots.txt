@@ -1,0 +1,3 @@
+# Demos de NOVA Growth Solutions: no indexar.
+User-agent: *
+Disallow: /
