@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as store from '../lib/store.js';
 import { useStore } from '../app/App.jsx';
 import { codebook, crosstab, byDayOfMonth, people, toCSV, codebookCSV, spssSyntax } from '../lib/analytics.js';
 import ToolShell from '../ToolShell.jsx';
+import { LiveBar } from '../dash/Dashboard.jsx';
 import { Bars, heatBg } from '../charts.jsx';
 
 const PRESETS = [
@@ -25,7 +26,9 @@ export default function Lab() {
   useStore();
   const config = store.getConfig();
   const [sec, setSec] = useState('cruces');
-  const [sim, setSim] = useState(true);
+  const [sim, setSim] = useState(!store.live);
+  useEffect(() => { store.refreshTeamData(); }, []);
+  const st = store.teamStatus();
   const [onlyConsent, setOnlyConsent] = useState(true);
   const raw = useMemo(() => store.allData({ includeSim: sim }), [sim, store.getVersion()]); // eslint-disable-line
   const data = useMemo(() => {
@@ -44,6 +47,7 @@ export default function Lab() {
           <label className="toggle"><input type="checkbox" id="lab-sim" checked={sim} onChange={(e) => setSim(e.target.checked)} /> Incluir simulados</label>
         </div>
       </div>
+      <LiveBar st={st} realCount={raw.sessions.filter((s) => !s.sim).length} />
       {sim && <div className="note warn">Incluye <b>datos simulados</b> con patrones inventados (fin de mes, sueño, ciclo) para mostrar lo que el Lab puede encontrar. No son conclusiones.</div>}
       {sec === 'cruces' && <Cross data={data} vars={vars} />}
       {sec === 'mes' && <Time data={data} />}

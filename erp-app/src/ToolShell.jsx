@@ -19,7 +19,7 @@ export default function ToolShell({ area, sections, section, onSection, children
             <path d="M25 22 C33 24 39 31 35 36 C31 39 26 31 25 24Z" style={{ fill: 'var(--coral)' }} />
             <rect x="22" y="12" width="4" height="22" rx="2" style={{ fill: 'var(--ink)' }} />
           </svg>
-          <div><b>Emotional Reconstruction</b><small>Demo fase 1 · {AREAS.find((a) => a[0] === area)?.[2]}</small></div>
+          <div><b>Emotional Reconstruction</b><small>{store.live ? 'Piloto' : 'Demo fase 1'} · {AREAS.find((a) => a[0] === area)?.[2]}</small></div>
         </div>
         {sections.map(([k, e, label, cnt]) => (
           <button key={k} className={'navi' + (section === k ? ' on' : '')} onClick={() => onSection(k)} aria-current={section === k}>
@@ -33,8 +33,8 @@ export default function ToolShell({ area, sections, section, onSection, children
         <a className="navi" href="#app" style={{ textDecoration: 'none' }}><span aria-hidden>🐛</span>Ver la app</a>
         <div style={{ flex: 1 }} />
         <div className="aside-foot" style={{ fontSize: '0.78rem', color: 'var(--ink-2)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <span>Sesión: {store.demoAccounts[area]?.email}</span>
-          <a href="#" onClick={() => store.setSessionRole(null)} style={{ color: 'inherit' }}>Cerrar sesión</a>
+          <span>Sesión: {store.live ? store.getStaffEmail() : store.demoAccounts[area]?.email}</span>
+          <a href="#" onClick={() => store.staffSignOut()} style={{ color: 'inherit' }}>Cerrar sesión</a>
         </div>
       </aside>
       <main>{children}</main>

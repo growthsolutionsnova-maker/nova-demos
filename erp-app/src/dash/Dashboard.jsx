@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as store from '../lib/store.js';
 import { useStore } from '../app/App.jsx';
 import { kpis, dailySeries, funnel, distribution, hourMatrix } from '../lib/analytics.js';
@@ -12,7 +12,9 @@ export default function Dashboard() {
   useStore();
   const config = store.getConfig();
   const [days, setDays] = useState(30);
-  const [sim, setSim] = useState(true);
+  const [sim, setSim] = useState(!store.live);
+  useEffect(() => { store.refreshTeamData(); }, []);
+  const st = store.teamStatus();
   const [sec, setSec] = useState('resumen');
   const data = useMemo(() => store.allData({ includeSim: sim }), [sim, store.getVersion()]); // eslint-disable-line
   const k = kpis(data, days);
@@ -51,8 +53,9 @@ export default function Dashboard() {
           <label className="toggle"><input type="checkbox" id="dash-sim" checked={sim} onChange={(e) => setSim(e.target.checked)} /> Incluir datos simulados</label>
         </div>
       </div>
-      {sim ? <div className="note warn">Estás viendo <b>datos simulados</b> para mostrar cómo se verá el dashboard. Tus {realCount} check-ins reales de este navegador se suman encima. Desmarca la casilla para ver solo los reales.</div>
-        : <div className="note">Solo datos reales de este navegador ({realCount} check-ins). En la fase 2 aquí aparecerán las personas del piloto.</div>}
+      <LiveBar st={st} realCount={realCount} />
+      {sim ? <div className="note warn">Estás viendo <b>datos simulados</b> para mostrar cómo se verá el dashboard, sumados a los {realCount} check-ins reales. Desmarca la casilla para ver solo los reales.</div>
+        : !store.live && <div className="note">Solo datos de este navegador ({realCount} check-ins).</div>}
 
       <section id="resumen" className="kpis">
         <div className="kpi star"><span className="v">{k.northStar.toFixed(1)}</span><span className="l">Check-ins con reflexión por persona activa / semana <b>(North Star)</b></span></div>
@@ -117,5 +120,15 @@ export default function Dashboard() {
         <div className="note">Aquí solo se ven cantidades. Quién vio la pantalla de crisis no aparece en el dashboard. Para el piloto, definir con el clínico revisor si alguien del equipo hace seguimiento y con qué consentimiento.</div>
       </section>
     </ToolShell>
+  );
+}
+
+export function LiveBar({ st, realCount }) {
+  if (!store.live) return null;
+  return (
+    <div className="note ctrl" style={{ justifyContent: 'space-between', background: st.error ? 'var(--coral-soft)' : 'var(--leaf-soft)' }}>
+      <span>{st.loading ? 'Cargando datos de la base…' : st.error ? `No se pudieron cargar los datos: ${st.error}` : <>🟢 Base de datos real · <b>{realCount}</b> check-ins de personas reales</>}</span>
+      <button className="btn small ghost" onClick={() => store.refreshTeamData()} disabled={st.loading}>Actualizar</button>
+    </div>
   );
 }

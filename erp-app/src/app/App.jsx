@@ -62,7 +62,7 @@ export default function AppShell() {
 }
 
 function Frame({ children }) {
-  return <div className="stage"><div className="phone"><div className="demo-flag">Demo · fase 1 · contenido en revisión</div>{children}</div></div>;
+  return <div className="stage"><div className="phone"><div className="demo-flag">{store.live ? 'Piloto' : 'Demo'} · contenido en revisión</div>{children}</div></div>;
 }
 
 // ---------------- Onboarding (valor desde el minuto 1: 3 pantallas y al check-in) ----------------

@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import * as store from '../lib/store.js';
 import { useStore } from '../app/App.jsx';
 import { validateConfig } from '../lib/engine.js';
+import { defaultConfig } from '../lib/content.js';
 import ToolShell from '../ToolShell.jsx';
 
 const LANGS = [['es', 'Español'], ['en', 'English'], ['pt', 'Português']];
@@ -33,6 +34,8 @@ export default function Admin() {
   const [lang, setLang] = useState('es');
   const [note, setNote] = useState('');
   const [justPublished, setJustPublished] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
   const issues = useMemo(() => validateConfig(draft), [draft]);
   const errors = issues.filter((i) => i.level === 'error');
   const update = (fn) => { const d = clone(draft); fn(d); store.saveDraft(d); setJustPublished(null); };
@@ -52,9 +55,15 @@ export default function Admin() {
         <div style={{ flex: 1 }} />
         {dirty && <input className="in" style={{ maxWidth: 280 }} id="pub-note" placeholder="¿Qué cambiaste? (para el historial)" value={note} onChange={(e) => setNote(e.target.value)} />}
         {dirty && <button className="btn ghost" onClick={() => store.discardDraft()}>Descartar</button>}
-        <button className="btn violet" disabled={!dirty || errors.length > 0} onClick={() => { const n = store.publishDraft(note); setNote(''); setJustPublished(n.version); }}>Publicar versión {pub.version + 1}</button>
+        <button className="btn violet" disabled={!dirty || errors.length > 0 || busy} onClick={async () => {
+          setBusy(true); setErr('');
+          try { const n = await store.publishDraft(note); setNote(''); setJustPublished(n.version); } catch (e) { setErr(e.message); }
+          setBusy(false);
+        }}>{busy ? 'Publicando…' : `Publicar versión ${pub.version + 1}`}</button>
         <a className="btn ghost" href="#app" style={{ textDecoration: 'none' }}>Probar en la app</a>
       </div>
+      {err && <div className="note warn">No se pudo publicar: {err}. Revisa que tu cuenta tenga rol de admin y que haya internet.</div>}
+      {store.live && <div className="note">Base de datos real: lo que publiques lo ven todas las personas en su próximo check-in.</div>}
       {justPublished && <div className="note" style={{ background: 'var(--leaf-soft)' }}>✓ Publicada la versión {justPublished}. Los check-ins nuevos guardan este número de versión, así el Lab sabe qué pregunta exacta vio cada persona.</div>}
       {issues.length > 0 && sec === 'flujo' && (
         <details className="panel"><summary style={{ cursor: 'pointer', fontWeight: 700 }}>Revisión automática ({issues.length})</summary>
@@ -273,11 +282,11 @@ function Versions({ pub }) {
         <thead><tr><th>Versión</th><th>Publicada</th><th>Nota</th></tr></thead>
         <tbody>
           <tr><td><b>{pub.version}</b> <span className="pill ok">actual</span></td><td>{new Date(pub.publishedAt).toLocaleString('es')}</td><td>{pub.note}</td></tr>
-          {hist.map((h) => <tr key={h.version}><td>{h.version}</td><td>{new Date(h.publishedAt).toLocaleString('es')}</td><td>{h.note}</td></tr>)}
+          {hist.map((h) => <tr key={h.version}><td>{h.version}</td><td>{new Date(h.publishedAt).toLocaleString('es')}{h.by ? ` · ${h.by}` : ''}</td><td>{h.note}</td></tr>)}
         </tbody>
       </table></div>
-      {!confirm ? <button className="btn ghost" style={{ alignSelf: 'flex-start' }} onClick={() => setConfirm(true)}>Volver al contenido original v1</button> : (
-        <div className="note warn ctrl">¿Seguro? Se pierden los cambios publicados en este navegador. <button className="btn small" onClick={() => { store.resetConfig(); setConfirm(false); }}>Sí, restaurar</button><button className="btn small ghost" onClick={() => setConfirm(false)}>Cancelar</button></div>
+      {!confirm ? <button className="btn ghost" style={{ alignSelf: 'flex-start' }} onClick={() => setConfirm(true)}>Cargar el contenido original en el borrador</button> : (
+        <div className="note warn ctrl">Se reemplaza el borrador por el contenido original v1. Para aplicarlo, publícalo como una versión nueva. <button className="btn small" onClick={() => { const d = defaultConfig(); store.saveDraft({ ...d, version: pub.version, publishedAt: pub.publishedAt, note: pub.note }); setConfirm(false); }}>Cargar</button><button className="btn small ghost" onClick={() => setConfirm(false)}>Cancelar</button></div>
       )}
     </div>
   );
