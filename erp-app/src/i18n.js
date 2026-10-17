@@ -1,0 +1,142 @@
+// Textos de interfaz de la app (no del contenido clínico, que vive en la configuración).
+const S = {
+  welcome_title: ['Tu corazón también puede transformarse', 'Your heart can be transformed too', 'Seu coração também pode se transformar'],
+  welcome_body: ['Un minuto al día para entender lo que sientes, encontrar calma y escuchar a Dios. Tu larvita crecerá contigo.', 'One minute a day to understand what you feel, find calm and hear from God. Your little caterpillar will grow with you.', 'Um minuto por dia para entender o que você sente, encontrar calma e ouvir Deus. Sua lagartinha vai crescer com você.'],
+  welcome_verse: ['"Transformaos por la renovación de vuestro entendimiento." Romanos 12:2', '"Be ye transformed by the renewing of your mind." Romans 12:2', '"Transformai-vos pela renovação do vosso entendimento." Romanos 12:2'],
+  start: ['Empezar', 'Start', 'Começar'],
+  choose_lang: ['¿En qué idioma quieres usar la app?', 'Which language do you want to use?', 'Em qual idioma você quer usar o app?'],
+  consent_title: ['Tus respuestas son tuyas', 'Your answers belong to you', 'Suas respostas são suas'],
+  consent_1: ['Guardamos lo que respondes para mostrarte tu mapa de emociones.', 'We save your answers to show you your feelings map.', 'Guardamos suas respostas para mostrar seu mapa de emoções.'],
+  consent_2: ['Nunca vendemos tus datos. Nunca.', 'We never sell your data. Never.', 'Nunca vendemos seus dados. Nunca.'],
+  consent_3: ['Esta app te acompaña, pero no reemplaza a un médico o psicólogo.', 'This app walks with you, but it does not replace a doctor or counselor.', 'Este app te acompanha, mas não substitui um médico ou psicólogo.'],
+  consent_req: ['Estoy de acuerdo', 'I agree', 'Eu concordo'],
+  consent_research: ['También pueden usar mis respuestas, sin mi nombre, para aprender a ayudar mejor a otras personas.', 'You can also use my answers, without my name, to learn how to help others better.', 'Também podem usar minhas respostas, sem meu nome, para aprender a ajudar melhor outras pessoas.'],
+  continue: ['Seguir', 'Continue', 'Continuar'],
+  first_checkin: ['Hacer mi primer check-in', 'Do my first check-in', 'Fazer meu primeiro check-in'],
+  hello_morning: ['Buenos días', 'Good morning', 'Bom dia'],
+  hello_afternoon: ['Buenas tardes', 'Good afternoon', 'Boa tarde'],
+  hello_night: ['Buenas noches', 'Good evening', 'Boa noite'],
+  how_now: ['¿Cómo te sientes ahora?', 'How do you feel right now?', 'Como você se sente agora?'],
+  breathe_now: ['Respirar ahora', 'Breathe now', 'Respirar agora'],
+  one_min: ['1 minuto', '1 minute', '1 minuto'],
+  care_days: ['días cuidándote esta semana', 'days caring for yourself this week', 'dias cuidando de você esta semana'],
+  care_day: ['día cuidándote esta semana', 'day caring for yourself this week', 'dia cuidando de você esta semana'],
+  good_day: ['día tranquilo', 'calm day', 'dia tranquilo'],
+  hard_day: ['día difícil', 'hard day', 'dia difícil'],
+  care_note: ['Cada día cuenta. Ninguno se pierde.', 'Every day counts. None are lost.', 'Cada dia conta. Nenhum se perde.'],
+  leaves_to_grow: ['hojas para crecer', 'leaves to grow', 'folhas para crescer'],
+  fully_grown: ['¡Ya eres mariposa! Sigue volando.', "You're a butterfly! Keep flying.", 'Você já é borboleta! Continue voando.'],
+  this_week: ['Esta semana', 'This week', 'Esta semana'],
+  tab_home: ['Inicio', 'Home', 'Início'],
+  tab_map: ['Mi mapa', 'My map', 'Meu mapa'],
+  tab_me: ['Yo', 'Me', 'Eu'],
+  back: ['Atrás', 'Back', 'Voltar'],
+  close: ['Cerrar', 'Close', 'Fechar'],
+  write_optional: ['¿Quieres escribir algo? (opcional)', 'Want to write something? (optional)', 'Quer escrever algo? (opcional)'],
+  write_ph: ['Una línea es suficiente…', 'One line is enough…', 'Uma linha é suficiente…'],
+  see_result: ['Ver lo que encontré', 'See what I found', 'Ver o que encontrei'],
+  might_be: ['Lo que puede estar pasando', 'What might be going on', 'O que pode estar acontecendo'],
+  right_now: ['Ahora mismo', 'Right now', 'Agora mesmo'],
+  did_it: ['¡Lo hice!', 'I did it!', 'Eu fiz!'],
+  not_now: ['Ahora no', 'Not now', 'Agora não'],
+  done_nice: ['¡Muy bien! Tu cuerpo te lo agradece.', 'Well done! Your body thanks you.', 'Muito bem! Seu corpo agradece.'],
+  verse_for_you: ['Para meditar', 'To reflect on', 'Para meditar'],
+  listen: ['Escuchar', 'Listen', 'Ouvir'],
+  stop: ['Parar', 'Stop', 'Parar'],
+  leaf_gain: ['+1 hoja', '+1 leaf', '+1 folha'],
+  ate_leaf: ['comió una hoja', 'ate a leaf', 'comeu uma folha'],
+  stored_light: ['guardó un rayito de luz', 'stored a ray of light', 'guardou um raiozinho de luz'],
+  grew_to: ['¡Creció! Ahora es', 'It grew! Now it is', 'Cresceu! Agora é'],
+  go_home: ['Volver al inicio', 'Back home', 'Voltar ao início'],
+  often_note: ['Si te sientes así casi siempre, hablar con alguien de confianza o con un profesional puede ayudarte mucho. No tienes que cargarlo sin ayuda.', 'If you feel this way almost always, talking with someone you trust or a professional can really help. You don\'t have to carry it alone.', 'Se você se sente assim quase sempre, conversar com alguém de confiança ou com um profissional pode ajudar muito. Você não precisa carregar isso sem ajuda.'],
+  name_title: ['¿Cómo se llama tu larvita?', "What's your caterpillar's name?", 'Qual é o nome da sua lagartinha?'],
+  name_ph: ['Ej.: Luz, Paco, Esperanza', 'e.g. Hope, Pip, Sunny', 'Ex.: Luz, Pipo, Esperança'],
+  skip: ['Saltar', 'Skip', 'Pular'],
+  age_q: ['¿Cuántos años tienes?', 'How old are you?', 'Quantos anos você tem?'],
+  motive_q: ['¿Qué te trae aquí?', 'What brings you here?', 'O que te traz aqui?'],
+  motive_entenderme: ['Entenderme mejor', 'Understand myself', 'Me entender melhor'],
+  motive_paz: ['Sentir más paz', 'Feel more peace', 'Sentir mais paz'],
+  motive_dios: ['Acercarme a Dios', 'Get closer to God', 'Me aproximar de Deus'],
+  motive_curiosidad: ['Tengo curiosidad', "I'm curious", 'Tenho curiosidade'],
+  reminder_q: ['¿Cuándo quieres que te recuerde?', 'When should I remind you?', 'Quando quer que eu te lembre?'],
+  reminder_ambos: ['Mañana y noche', 'Morning and night', 'Manhã e noite'],
+  reminder_manana: ['Solo mañana', 'Mornings only', 'Só de manhã'],
+  reminder_noche: ['Solo noche', 'Nights only', 'Só à noite'],
+  reminder_ninguno: ['Sin recordatorios', 'No reminders', 'Sem lembretes'],
+  minor_note: ['¡Qué bueno tenerte aquí! Pídele a tu mamá, papá o a un adulto de confianza que te acompañe.', "Glad you're here! Ask a parent or a trusted adult to join you.", 'Que bom ter você aqui! Peça para sua mãe, seu pai ou um adulto de confiança te acompanhar.'],
+  map_title: ['Mi mapa de emociones', 'My feelings map', 'Meu mapa de emoções'],
+  map_empty: ['Aquí verás tus emociones día a día. Haz tu check-in y aparecerá tu primer emoji.', 'Here you will see your feelings day by day. Do a check-in and your first emoji will show up.', 'Aqui você verá suas emoções dia a dia. Faça seu check-in e o primeiro emoji vai aparecer.'],
+  patterns: ['Lo que voy descubriendo', 'What I am discovering', 'O que estou descobrindo'],
+  patterns_wait: ['Con 5 check-ins te muestro tu primer patrón.', 'After 5 check-ins I will show you your first pattern.', 'Com 5 check-ins eu te mostro seu primeiro padrão.'],
+  week_summary: ['Esta semana', 'This week', 'Esta semana'],
+  good_days: ['días tranquilos', 'calm days', 'dias tranquilos'],
+  hard_days: ['días difíciles', 'hard days', 'dias difíceis'],
+  pat_sleep: ['Cuando duermes poco, tus días se sienten más pesados. Descansar también es cuidarte.', 'When you sleep little, your days feel heavier. Resting is also self-care.', 'Quando você dorme pouco, seus dias ficam mais pesados. Descansar também é se cuidar.'],
+  pat_month: ['Los últimos días del mes suelen ser más difíciles para ti. Podemos prepararnos juntos para esa temporada.', 'The last days of the month tend to be harder for you. We can get ready for that season together.', 'Os últimos dias do mês costumam ser mais difíceis para você. Podemos nos preparar juntos para essa época.'],
+  pat_dow: ['Los {d} suelen ser más difíciles. Es bueno saberlo.', '{d} tend to be harder. Good to know.', 'As {d} costumam ser mais difíceis. É bom saber.'],
+  pat_night: ['En las noches te sientes más bajito que en las mañanas.', 'At night you feel lower than in the mornings.', 'À noite você se sente mais pra baixo do que de manhã.'],
+  pat_help: ['Lo que más te ayuda: {a}.', 'What helps you most: {a}.', 'O que mais te ajuda: {a}.'],
+  pat_none: ['Todavía no veo un patrón claro. Sigue así: cada check-in me ayuda a conocerte.', "I don't see a clear pattern yet. Keep going: each check-in helps me know you.", 'Ainda não vejo um padrão claro. Continue: cada check-in me ajuda a te conhecer.'],
+  example_map: ['Ver un mapa de ejemplo', 'See an example map', 'Ver um mapa de exemplo'],
+  my_map: ['Ver mi mapa', 'See my map', 'Ver meu mapa'],
+  example_tag: ['Ejemplo con datos simulados', 'Example with simulated data', 'Exemplo com dados simulados'],
+  me_title: ['Mi espacio', 'My space', 'Meu espaço'],
+  language: ['Idioma', 'Language', 'Idioma'],
+  country: ['País', 'Country', 'País'],
+  save_map: ['Guarda tu mapa', 'Save your map', 'Salve seu mapa'],
+  save_map_body: ['Con tu email puedes recuperar tu mapa si cambias de teléfono. Lo guardamos separado de tus emociones.', 'With your email you can get your map back if you change phones. We keep it apart from your feelings.', 'Com seu email você recupera seu mapa se trocar de celular. Guardamos separado das suas emoções.'],
+  save: ['Guardar', 'Save', 'Salvar'],
+  saved: ['Guardado', 'Saved', 'Salvo'],
+  stages_title: ['Las etapas de tu transformación', 'The stages of your transformation', 'As etapas da sua transformação'],
+  privacy_title: ['Privacidad', 'Privacy', 'Privacidade'],
+  delete_data: ['Borrar todos mis datos', 'Delete all my data', 'Apagar todos os meus dados'],
+  delete_confirm: ['¿Seguro? Se borrarán tu mapa y tu larvita. No se puede deshacer.', 'Are you sure? Your map and caterpillar will be deleted. This cannot be undone.', 'Tem certeza? Seu mapa e sua lagartinha serão apagados. Não dá para desfazer.'],
+  yes_delete: ['Sí, borrar', 'Yes, delete', 'Sim, apagar'],
+  cancel: ['Cancelar', 'Cancel', 'Cancelar'],
+  reminders: ['Recordatorios', 'Reminders', 'Lembretes'],
+  reminders_note: ['Las notificaciones llegan con la app de iOS y Android.', 'Notifications come with the iOS and Android app.', 'As notificações chegam com o app de iOS e Android.'],
+  breath_in: ['Toma aire…', 'Breathe in…', 'Puxe o ar…'],
+  breath_out: ['Suéltalo despacio…', 'Let it out slowly…', 'Solte devagar…'],
+  breath_ready: ['Ponte cómodo. Vamos a respirar 5 veces con la mariposa.', "Get comfortable. Let's breathe 5 times with the butterfly.", 'Fique confortável. Vamos respirar 5 vezes com a borboleta.'],
+  breath_go: ['Empezar', 'Start', 'Começar'],
+  breath_done: ['Bien hecho. Tu cuerpo está un poquito más tranquilo.', 'Well done. Your body is a little calmer now.', 'Muito bem. Seu corpo está um pouquinho mais calmo.'],
+  breath_again: ['Otra vez', 'Again', 'De novo'],
+  works_offline: ['Funciona sin internet', 'Works offline', 'Funciona sem internet'],
+  call: ['Llamar', 'Call', 'Ligar'],
+  text: ['Escribir', 'Text', 'Mensagem'],
+  breathe_with_me: ['Respirar conmigo mientras tanto', 'Breathe with me meanwhile', 'Respirar comigo enquanto isso'],
+  safe_back: ['Ya estoy a salvo, volver al inicio', "I'm safe now, back home", 'Já estou em segurança, voltar ao início'],
+  crisis_other: ['Busca el número de emergencias de tu país o ve con un adulto de confianza.', 'Find your local emergency number or go to a trusted adult.', 'Procure o número de emergência do seu país ou vá até um adulto de confiança.'],
+  disclaimer: ['Esta app acompaña, no diagnostica ni reemplaza a un profesional.', 'This app accompanies you; it does not diagnose or replace a professional.', 'Este app acompanha; não diagnostica nem substitui um profissional.'],
+  where_live: ['¿Dónde vives?', 'Where do you live?', 'Onde você mora?'],
+  demo_badge: ['Demo', 'Demo', 'Demo'],
+};
+const IDX = { es: 0, en: 1, pt: 2 };
+export function tr(lang, key, vars) {
+  const row = S[key]; if (!row) return key;
+  let s = row[IDX[lang] ?? 0] ?? row[0];
+  if (vars) for (const [k, v] of Object.entries(vars)) s = s.replace('{' + k + '}', v);
+  return s;
+}
+export const L = (obj, lang) => (obj ? obj[lang] || obj.es || '' : '');
+export const DOW = {
+  es: ['domingos', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábados'],
+  en: ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'],
+  pt: ['domingos', 'segundas', 'terças', 'quartas', 'quintas', 'sextas', 'sábados'],
+};
+export const DOW_SHORT = { es: ['D', 'L', 'M', 'M', 'J', 'V', 'S'], en: ['S', 'M', 'T', 'W', 'T', 'F', 'S'], pt: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'] };
+export const COUNTRIES = {
+  US: ['Estados Unidos', 'United States', 'Estados Unidos'], MX: ['México', 'Mexico', 'México'], CO: ['Colombia', 'Colombia', 'Colômbia'],
+  BR: ['Brasil', 'Brazil', 'Brasil'], ES: ['España', 'Spain', 'Espanha'], OTHER: ['Otro país', 'Other country', 'Outro país'],
+};
+export function guessCountry() {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (tz === 'America/Bogota') return 'CO';
+    if (tz.startsWith('America/Mexico') || ['America/Monterrey', 'America/Cancun', 'America/Tijuana', 'America/Merida', 'America/Chihuahua'].includes(tz)) return 'MX';
+    if (['America/Sao_Paulo', 'America/Fortaleza', 'America/Recife', 'America/Manaus', 'America/Bahia', 'America/Belem'].includes(tz)) return 'BR';
+    if (tz === 'Europe/Madrid' || tz === 'Atlantic/Canary') return 'ES';
+    if (['America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'America/Phoenix', 'America/Anchorage', 'Pacific/Honolulu', 'America/Detroit'].includes(tz)) return 'US';
+  } catch { /* */ }
+  return 'OTHER';
+}
