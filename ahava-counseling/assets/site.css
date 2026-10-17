@@ -716,3 +716,4 @@ a.hero__card .hero__card-go{color:var(--c-ink)}
 .dres__next p{width:100%;font-family:var(--f-display);font-size:1.3rem;color:#fff}
 @media (max-width:860px){.dres__grid{grid-template-columns:1fr}}
 @media (max-width:480px){.dguide{grid-template-columns:1fr}.dguide__covers{width:96px}.dguide__done{grid-column:1}.dres__next .btn{width:100%}.dnav__next{min-width:0;flex:1}}
+.dguide__dl{align-self:flex-start;margin-top:6px}.dguide__dl svg{rotate:90deg}
