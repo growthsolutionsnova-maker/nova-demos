@@ -68,7 +68,7 @@ function Frame({ children }) {
 // ---------------- Onboarding (valor desde el minuto 1: 3 pantallas y al check-in) ----------------
 function Onboarding({ onDone }) {
   const [step, setStep] = useState(0);
-  const [lang, setLang] = useState(() => { const n = (navigator.language || 'es').slice(0, 2); return ['es', 'en', 'pt'].includes(n) ? n : 'es'; });
+  const [lang, setLang] = useState(() => { let l = null; try { l = localStorage.getItem('erp.v1.siteLang'); } catch { /* */ } const n = l || (navigator.language || 'es').slice(0, 2); return ['es', 'en', 'pt'].includes(n) ? n : 'es'; });
   const [ok, setOk] = useState(false);
   const [research, setResearch] = useState(true);
   if (step === 0) return (

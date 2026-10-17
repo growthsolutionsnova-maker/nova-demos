@@ -165,9 +165,9 @@ export function allData({ includeSim = true } = {}) {
 // ---------- Accesos (demo) ----------
 // En la fase 2 esto lo hace Supabase Auth con roles en la tabla staff_roles.
 export const demoAccounts = {
-  admin: { email: 'admin@erp.demo', role: 'admin', who: 'Emilia y Queren' },
+  admin: { email: 'admin@erp.demo', role: 'admin', who: 'Contenido' },
   dashboard: { email: 'equipo@erp.demo', role: 'team', who: 'Equipo' },
-  lab: { email: 'investigacion@erp.demo', role: 'research', who: 'Dra. Emilia' },
+  lab: { email: 'investigacion@erp.demo', role: 'research', who: 'Investigación' },
 };
 export function getSessionRole() { return read('role', null); }
 export function setSessionRole(r) { write('role', r); emit(); }
