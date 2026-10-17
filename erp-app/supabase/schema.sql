@@ -1,5 +1,5 @@
 -- Emotional Reconstruction Program · Base de datos real (piloto, fase 2)
--- Proyecto Supabase PROPIO del programa (organización "Emotional Reconstruction").
+-- Proyecto Supabase unfjpspcjwogshzcrmpb (cuenta NOVA, us-east-1). Aplicado el 17-10-2026 por partes.
 --
 -- Cómo se protege a las personas:
 --  * La persona no necesita cuenta: su teléfono tiene un código seudónimo (pid) + un secreto.
