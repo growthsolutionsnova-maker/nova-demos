@@ -63,7 +63,8 @@ export default function Admin() {
         <a className="btn ghost" href="#app" style={{ textDecoration: 'none' }}>Probar en la app</a>
       </div>
       {err && <div className="note warn">No se pudo publicar: {err}. Revisa que tu cuenta tenga rol de admin y que haya internet.</div>}
-      {store.live && <div className="note">Base de datos real: lo que publiques lo ven todas las personas en su próximo check-in.</div>}
+      {store.live && !store.isDemoView() && <div className="note">Base de datos real: lo que publiques lo ven todas las personas en su próximo check-in.</div>}
+      {store.isDemoView() && <div className="note warn">Modo demostración: puedes editar y publicar para probar, pero los cambios quedan solo en este navegador. Para publicar a todas las personas, entra con una cuenta de admin.</div>}
       {justPublished && <div className="note" style={{ background: 'var(--leaf-soft)' }}>✓ Publicada la versión {justPublished}. Los check-ins nuevos guardan este número de versión, así el Lab sabe qué pregunta exacta vio cada persona.</div>}
       {issues.length > 0 && sec === 'flujo' && (
         <details className="panel"><summary style={{ cursor: 'pointer', fontWeight: 700 }}>Revisión automática ({issues.length})</summary>

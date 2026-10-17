@@ -39,7 +39,7 @@ export async function publishDraft(note) {
   const cur = getConfig();
   const draft = getDraft();
   const next = { ...draft, version: cur.version + 1, publishedAt: new Date().toISOString(), note: note || 'Cambios desde Admin' };
-  if (live) await remote.publishConfig(next); // si falla, lanza error y no se cambia nada local
+  if (live && !isDemoView()) await remote.publishConfig(next); // si falla, lanza error y no se cambia nada local
   const hist = read('history', []);
   hist.unshift({ version: cur.version, publishedAt: cur.publishedAt, note: cur.note });
   write('history', hist.slice(0, 30));
@@ -146,13 +146,13 @@ let simCache = null;
 let teamCache = null, teamErr = null, teamLoading = false;
 export function teamStatus() { return { loading: teamLoading, error: teamErr, loaded: !!teamCache }; }
 export async function refreshTeamData() {
-  if (!live) return;
+  if (!live || isDemoView()) return;
   teamLoading = true; teamErr = null; emit();
   try { teamCache = await remote.fetchTeamData(); } catch (e) { teamErr = e.message; }
   teamLoading = false; emit();
 }
 export function allData({ includeSim = true } = {}) {
-  const real = live ? (teamCache || { profiles: [], sessions: [], answers: [] }) : { profiles: read('profiles', []), sessions: read('sessions', []), answers: read('answers', []) };
+  const real = live && !isDemoView() ? (teamCache || { profiles: [], sessions: [], answers: [] }) : { profiles: read('profiles', []), sessions: read('sessions', []), answers: read('answers', []) };
   if (!includeSim) return real;
   if (!simCache) simCache = simulate(getConfig());
   return {
@@ -172,6 +172,10 @@ export const demoAccounts = {
 export function getSessionRole() { return read('role', null); }
 export function setSessionRole(r) { write('role', r); emit(); }
 export function getStaffEmail() { return read('staffEmail', null); }
+// Modo demostración: entra a Admin/Dashboard/Lab con un clic, solo con datos simulados.
+// No toca la base real (no lee datos de personas ni publica contenido).
+export const isDemoView = () => read('role', null) === 'demoview';
+export function enterDemoView() { teamCache = null; write('role', 'demoview'); write('staffEmail', 'demo@erp.demo'); emit(); }
 export async function staffSignIn(email, password) {
   const r = await remote.signIn(email, password);
   if (!r?.role) { await remote.signOut(); throw new Error('Esta cuenta no tiene permisos en el programa.'); }
@@ -179,7 +183,7 @@ export async function staffSignIn(email, password) {
   return r.role;
 }
 export async function staffCheck() {
-  if (!live) return;
+  if (!live || isDemoView()) return;
   const r = await remote.currentRole();
   write('role', r?.role || null); write('staffEmail', r?.email || null); emit();
 }

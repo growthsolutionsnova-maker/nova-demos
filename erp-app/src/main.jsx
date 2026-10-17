@@ -28,6 +28,7 @@ const T = {
     enter: 'Entrar a', user: 'Usuario', pass: 'Clave', go: 'Entrar', going: 'Entrando…',
     footLive: 'Piloto: las respuestas se guardan en una base de datos protegida, con un código en vez del nombre. El equipo entra con su email y clave. Contenido clínico y bíblico en revisión.',
     footDemo: 'Modo demo: lo que hagas se guarda solo en este navegador. El Dashboard y el Lab muestran además datos simulados (marcados). Contenido clínico y bíblico en revisión.',
+    demoBtn: 'Ver demostración (datos simulados)', demoNote: 'Entra con un clic. Solo datos de ejemplo; no muestra datos de personas reales.', realLogin: 'Cuenta del equipo (datos reales)',
     teamOnly: 'Este acceso es para el equipo.', back: '← Volver a los accesos', checking: 'Verificando acceso…', noPerm: 'Tu cuenta no tiene permiso para esta sección.',
   },
   en: {
@@ -42,6 +43,7 @@ const T = {
     enter: 'Go to', user: 'User', pass: 'Password', go: 'Sign in', going: 'Signing in…',
     footLive: 'Pilot: answers are stored in a protected database, with a code instead of a name. The team signs in with email and password. Clinical and biblical content under review.',
     footDemo: 'Demo mode: what you do is saved only in this browser. The Dashboard and Lab also show simulated data (marked). Clinical and biblical content under review.',
+    demoBtn: 'View demo (simulated data)', demoNote: 'One click. Example data only; no real people\'s data is shown.', realLogin: 'Team account (real data)',
     teamOnly: 'This area is for the team.', back: '← Back to access', checking: 'Checking access…', noPerm: 'Your account does not have permission for this area.',
   },
   pt: {
@@ -56,6 +58,7 @@ const T = {
     enter: 'Entrar no', user: 'Usuário', pass: 'Senha', go: 'Entrar', going: 'Entrando…',
     footLive: 'Piloto: as respostas ficam em um banco de dados protegido, com um código no lugar do nome. A equipe entra com email e senha. Conteúdo clínico e bíblico em revisão.',
     footDemo: 'Modo demo: o que você fizer fica salvo só neste navegador. O Dashboard e o Lab mostram também dados simulados (marcados). Conteúdo clínico e bíblico em revisão.',
+    demoBtn: 'Ver demonstração (dados simulados)', demoNote: 'Entra com um clique. Só dados de exemplo; não mostra dados de pessoas reais.', realLogin: 'Conta da equipe (dados reais)',
     teamOnly: 'Este acesso é para a equipe.', back: '← Voltar aos acessos', checking: 'Verificando acesso…', noPerm: 'Sua conta não tem permissão para esta seção.',
   },
 };
@@ -147,7 +150,7 @@ function Gate({ area, children }) {
   const [checked, setChecked] = useState(!store.live);
   useEffect(() => { if (store.live) store.staffCheck().finally(() => setChecked(true)); }, []);
   const role = store.getSessionRole();
-  const ok = store.live ? NEED[area].includes(role) : (role === store.demoAccounts[area].role || role === 'admin');
+  const ok = store.live ? (role === 'demoview' || NEED[area].includes(role)) : (role === store.demoAccounts[area].role || role === 'admin');
   if (!checked) return <div className="access" style={{ justifyContent: 'center' }}><p className="muted">{t.checking}</p></div>;
   if (ok) return children;
   return (
@@ -156,7 +159,15 @@ function Gate({ area, children }) {
       <div className="door" style={{ maxWidth: 420, width: '100%' }}>
         <h2>{DOORS[area][0]} {DOORS[area][1]}</h2>
         <p style={{ margin: 0 }}>{t.teamOnly}</p>
-        {store.live ? <StaffLogin area={area} t={t} /> : (
+        {store.live ? (
+          <>
+            <button className="btn violet" onClick={() => store.enterDemoView()}>{t.demoBtn}</button>
+            <span className="muted" style={{ fontSize: '0.85rem' }}>{t.demoNote}</span>
+            <div style={{ height: 1, background: 'var(--line)', margin: '6px 0' }} />
+            <b style={{ fontSize: '0.92rem' }}>{t.realLogin}</b>
+            <StaffLogin area={area} t={t} />
+          </>
+        ) : (
           <form className="login" onSubmit={(ev) => { ev.preventDefault(); store.setSessionRole(store.demoAccounts[area].role); }}>
             <span>{t.user} <code>{store.demoAccounts[area].email}</code></span><span>{t.pass} <code>demo</code></span>
             <button className="btn small violet" type="submit">{t.go}</button>

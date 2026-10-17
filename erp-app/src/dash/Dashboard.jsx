@@ -12,7 +12,7 @@ export default function Dashboard() {
   useStore();
   const config = store.getConfig();
   const [days, setDays] = useState(30);
-  const [sim, setSim] = useState(!store.live);
+  const [sim, setSim] = useState(!store.live || store.isDemoView());
   useEffect(() => { store.refreshTeamData(); }, []);
   const st = store.teamStatus();
   const [sec, setSec] = useState('resumen');
@@ -125,6 +125,12 @@ export default function Dashboard() {
 
 export function LiveBar({ st, realCount }) {
   if (!store.live) return null;
+  if (store.isDemoView()) return (
+    <div className="note warn ctrl" style={{ justifyContent: 'space-between' }}>
+      <span>Modo demostración: solo datos simulados. Los datos reales del piloto se ven entrando con una cuenta del equipo.</span>
+      <a className="btn small ghost" href="#" onClick={() => store.staffSignOut()}>Entrar con mi cuenta</a>
+    </div>
+  );
   return (
     <div className="note ctrl" style={{ justifyContent: 'space-between', background: st.error ? 'var(--coral-soft)' : 'var(--leaf-soft)' }}>
       <span>{st.loading ? 'Cargando datos de la base…' : st.error ? `No se pudieron cargar los datos: ${st.error}` : <>🟢 Base de datos real · <b>{realCount}</b> check-ins de personas reales</>}</span>

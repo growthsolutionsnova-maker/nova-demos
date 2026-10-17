@@ -26,7 +26,7 @@ export default function Lab() {
   useStore();
   const config = store.getConfig();
   const [sec, setSec] = useState('cruces');
-  const [sim, setSim] = useState(!store.live);
+  const [sim, setSim] = useState(!store.live || store.isDemoView());
   useEffect(() => { store.refreshTeamData(); }, []);
   const st = store.teamStatus();
   const [onlyConsent, setOnlyConsent] = useState(true);
