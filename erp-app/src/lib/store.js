@@ -192,3 +192,4 @@ export async function staffSignOut() {
   teamCache = null; write('role', null); write('staffEmail', null); emit();
 }
 export const pendingSync = () => remote.pending();
+export function setSiteLang(l) { try { localStorage.setItem('erp.v1.siteLang', l); } catch { /* */ } try { document.documentElement.lang = l; } catch { /* */ } emit(); }

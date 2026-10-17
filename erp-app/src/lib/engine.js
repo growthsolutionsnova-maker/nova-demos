@@ -1,3 +1,4 @@
+import { tx } from '../tx.js';
 // Motor genérico: navega el grafo de pantallas, evalúa reglas y detecta crisis.
 // No sabe nada de "emociones": todo viene de la configuración (datos).
 
@@ -76,17 +77,17 @@ export function validateConfig(config) {
   const ids = new Set(Object.keys(config.screens));
   const langs = ['es', 'en', 'pt'];
   for (const [id, s] of Object.entries(config.screens)) {
-    if (!s.options || s.options.length < 1) issues.push({ level: 'error', where: id, msg: 'La pantalla no tiene opciones.' });
-    if (s.options && s.options.length > 4) issues.push({ level: 'error', where: id, msg: 'Máximo 4 opciones por pantalla.' });
-    for (const l of langs) if (!s.prompt?.[l]?.trim()) issues.push({ level: 'warn', where: id, msg: `Falta la pregunta en ${l.toUpperCase()}.` });
+    if (!s.options || s.options.length < 1) issues.push({ level: 'error', where: id, msg: tx('La pantalla no tiene opciones.') });
+    if (s.options && s.options.length > 4) issues.push({ level: 'error', where: id, msg: tx('Máximo 4 opciones por pantalla.') });
+    for (const l of langs) if (!s.prompt?.[l]?.trim()) issues.push({ level: 'warn', where: id, msg: tx('Falta la pregunta en {l}.', { l: l.toUpperCase() }) });
     const codes = new Set();
     for (const o of s.options || []) {
-      if (codes.has(o.code)) issues.push({ level: 'error', where: id, msg: `Código repetido: ${o.code}` });
+      if (codes.has(o.code)) issues.push({ level: 'error', where: id, msg: tx('Código repetido: {c}', { c: o.code }) });
       codes.add(o.code);
-      for (const l of langs) if (!o.label?.[l]?.trim()) issues.push({ level: 'warn', where: id, msg: `Opción "${o.code}" sin texto en ${l.toUpperCase()}.` });
-      if (o.next && !o.next.startsWith('@') && !ids.has(o.next)) issues.push({ level: 'error', where: id, msg: `La opción "${o.code}" lleva a una pantalla que no existe (${o.next}).` });
+      for (const l of langs) if (!o.label?.[l]?.trim()) issues.push({ level: 'warn', where: id, msg: tx('Opción "{c}" sin texto en {l}.', { c: o.code, l: l.toUpperCase() }) });
+      if (o.next && !o.next.startsWith('@') && !ids.has(o.next)) issues.push({ level: 'error', where: id, msg: tx('La opción "{c}" lleva a una pantalla que no existe ({n}).', { c: o.code, n: o.next }) });
     }
-    if (s.next && !s.next.startsWith('@') && !ids.has(s.next)) issues.push({ level: 'error', where: id, msg: `Siguiente pantalla inexistente: ${s.next}` });
+    if (s.next && !s.next.startsWith('@') && !ids.has(s.next)) issues.push({ level: 'error', where: id, msg: tx('Siguiente pantalla inexistente: {n}', { n: s.next }) });
   }
   return issues;
 }

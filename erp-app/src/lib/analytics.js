@@ -1,10 +1,13 @@
 // Cálculos para Dashboard y Lab. Todo sobre datos seudónimos (sin email).
 import { localDateStr } from './util.js';
+import { tx } from '../tx.js';
 
-const L = (o) => (o && (o.es || o)) || '';
+let LANG = 'es';
+const L = (o) => (o && (o[LANG] || o.es || o)) || '';
 
 // ---------- Diccionario de variables (codebook) ----------
-export function codebook(config) {
+export function codebook(config, lang = 'es') {
+  LANG = lang;
   const fromKey = (key) => {
     const vals = []; const seen = new Set();
     for (const s of Object.values(config.screens)) if (s.key === key) for (const o of s.options) {
@@ -18,25 +21,25 @@ export function codebook(config) {
     return s ? L(s.prompt) : key;
   };
   const ans = (key, label) => ({ id: key, label, question: titleOf(key), group: 'Respuestas', get: (s) => s.answers?.[key] ?? null, values: fromKey(key) });
-  const dows = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  const dows = { es: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'], en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], pt: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'] }[lang] || ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
   return [
-    ans('animo', 'Ánimo general'),
-    ans('emocion', 'Emoción'),
-    ans('sueno', 'Sueño'),
-    ans('comida', 'Alimentación'),
-    ans('cuerpo', 'Cuerpo'),
-    ans('tema', 'Tema en la mente'),
-    ans('necesidad', 'Necesidad (reflexión)'),
-    ans('fuente_bien', 'Qué ayudó (días buenos)'),
-    ans('ayudo', '¿Te ayudó?'),
-    ans('frecuencia', 'Frecuencia'),
-    { id: 'factor', label: 'Factor probable (regla)', group: 'Motor', get: (s) => s.factor, values: Object.keys(config.insights).map((k) => ({ code: k, label: k })) },
-    { id: 'momento', label: 'Momento del día', group: 'Tiempo', get: (s) => (s.hour < 12 ? 'manana' : s.hour < 18 ? 'tarde' : 'noche'), values: [{ code: 'manana', label: 'Mañana' }, { code: 'tarde', label: 'Tarde' }, { code: 'noche', label: 'Noche' }] },
-    { id: 'dia_semana', label: 'Día de la semana', group: 'Tiempo', get: (s) => String(s.dow), values: [1, 2, 3, 4, 5, 6, 0].map((d) => ({ code: String(d), label: dows[d] })) },
-    { id: 'fase_mes', label: 'Parte del mes', group: 'Tiempo', get: (s) => (s.dom <= 1 || s.dom >= 27 ? 'fin' : s.dom <= 10 ? 'inicio' : 'medio'), values: [{ code: 'inicio', label: 'Días 2–10' }, { code: 'medio', label: 'Días 11–26' }, { code: 'fin', label: 'Días 27–1' }] },
-    { id: 'pais', label: 'País', group: 'Perfil', profile: true, get: (s, p) => p?.country ?? null, values: ['CO', 'MX', 'US', 'BR', 'ES', 'OTHER'].map((c) => ({ code: c, label: c })) },
-    { id: 'edad', label: 'Rango de edad', group: 'Perfil', profile: true, get: (s, p) => p?.age ?? null, values: [{ code: '13_17', label: '13–17' }, { code: '18_29', label: '18–29' }, { code: '30_49', label: '30–49' }, { code: '50_mas', label: '50+' }] },
-    { id: 'idioma', label: 'Idioma', group: 'Perfil', profile: true, get: (s, p) => p?.lang ?? null, values: [{ code: 'es', label: 'Español' }, { code: 'en', label: 'English' }, { code: 'pt', label: 'Português' }] },
+    ans('animo', tx('Ánimo general')),
+    ans('emocion', tx('Emoción')),
+    ans('sueno', tx('Sueño')),
+    ans('comida', tx('Alimentación')),
+    ans('cuerpo', tx('Cuerpo')),
+    ans('tema', tx('Tema en la mente')),
+    ans('necesidad', tx('Necesidad (reflexión)')),
+    ans('fuente_bien', tx('Qué ayudó (días buenos)')),
+    ans('ayudo', tx('¿Te ayudó?')),
+    ans('frecuencia', tx('Frecuencia')),
+    { id: 'factor', label: tx('Factor probable (regla)'), group: 'Motor', get: (s) => s.factor, values: Object.keys(config.insights).map((k) => ({ code: k, label: k })) },
+    { id: 'momento', label: tx('Momento del día'), group: 'Tiempo', get: (s) => (s.hour < 12 ? 'manana' : s.hour < 18 ? 'tarde' : 'noche'), values: [{ code: 'manana', label: tx('Mañana') }, { code: 'tarde', label: tx('Tarde') }, { code: 'noche', label: tx('Noche') }] },
+    { id: 'dia_semana', label: tx('Día de la semana'), group: 'Tiempo', get: (s) => String(s.dow), values: [1, 2, 3, 4, 5, 6, 0].map((d) => ({ code: String(d), label: dows[d] })) },
+    { id: 'fase_mes', label: tx('Parte del mes'), group: 'Tiempo', get: (s) => (s.dom <= 1 || s.dom >= 27 ? 'fin' : s.dom <= 10 ? 'inicio' : 'medio'), values: [{ code: 'inicio', label: tx('Días 2–10') }, { code: 'medio', label: tx('Días 11–26') }, { code: 'fin', label: tx('Días 27–1') }] },
+    { id: 'pais', label: tx('País'), group: 'Perfil', profile: true, get: (s, p) => p?.country ?? null, values: ['CO', 'MX', 'US', 'BR', 'ES', 'OTHER'].map((c) => ({ code: c, label: c })) },
+    { id: 'edad', label: tx('Rango de edad'), group: 'Perfil', profile: true, get: (s, p) => p?.age ?? null, values: [{ code: '13_17', label: '13–17' }, { code: '18_29', label: '18–29' }, { code: '30_49', label: '30–49' }, { code: '50_mas', label: '50+' }] },
+    { id: 'idioma', label: tx('Idioma'), group: 'Perfil', profile: true, get: (s, p) => p?.lang ?? null, values: [{ code: 'es', label: 'Español' }, { code: 'en', label: 'English' }, { code: 'pt', label: 'Português' }] },
   ];
 }
 
@@ -188,16 +191,16 @@ export function toCSV(data, config) {
   return lines.join('\n');
 }
 
-export function codebookCSV(config) {
+export function codebookCSV(config, lang = 'es') {
   const lines = ['variable,etiqueta,pregunta,codigo,etiqueta_valor'];
   const esc = (s) => '"' + String(s ?? '').replace(/"/g, '""') + '"';
-  for (const v of codebook(config)) for (const val of v.values) lines.push([v.id, esc(v.label), esc(v.question || ''), val.code, esc(val.label.replace(/^\S+\s/, ''))].join(','));
+  for (const v of codebook(config, lang)) for (const val of v.values) lines.push([v.id, esc(v.label), esc(v.question || ''), val.code, esc(val.label.replace(/^\S+\s/, ''))].join(','));
   return lines.join('\n');
 }
 
 // Sintaxis SPSS opcional: importa el CSV y aplica etiquetas (variables de texto con valores etiquetados).
-export function spssSyntax(config) {
-  const vars = codebook(config);
+export function spssSyntax(config, lang = 'es') {
+  const vars = codebook(config, lang);
   const q = (s) => "'" + String(s).replace(/'/g, "''") + "'";
   let out = `* Importar check-ins exportados desde el Lab.\nGET DATA /TYPE=TXT /FILE='checkins.csv' /DELIMITERS="," /QUALIFIER='"' /FIRSTCASE=2\n /VARIABLES=pid A24 sid A24 origen A10 fecha A10 hora F2.0 dia_mes F2.0 version_flujo F3.0 completo F1.0 crisis F1.0\n`;
   out += vars.map((v) => `  ${v.id} A16`).join('\n') + '\n  accion A16 accion_hecha F1.0 versiculo A16 duracion_seg F4.0.\n\nVARIABLE LABELS\n';
