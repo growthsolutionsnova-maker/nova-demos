@@ -23,10 +23,10 @@ export const screens = {
     type: 'choice', key: 'emocion', title: 'Emoción (bien)',
     prompt: t('¡Qué bueno! ¿Cuál se parece más?', 'Nice! Which one fits best?', 'Que bom! Qual combina mais?'),
     options: [
-      { code: 'alegria', emoji: '😄', label: t('Alegre', 'Happy', 'Alegre') },
-      { code: 'paz', emoji: '😌', label: t('En paz', 'At peace', 'Em paz') },
-      { code: 'gratitud', emoji: '🙏', label: t('Con gratitud', 'Thankful', 'Com gratidão') },
-      { code: 'energia', emoji: '💪', label: t('Con energía', 'Full of energy', 'Com energia') },
+      { code: 'alegria', emoji: '😄', color: 'verde', label: t('Alegre', 'Happy', 'Alegre') },
+      { code: 'paz', emoji: '😌', color: 'verde', label: t('En paz', 'At peace', 'Em paz') },
+      { code: 'gratitud', emoji: '🙏', color: 'verde', label: t('Con gratitud', 'Thankful', 'Com gratidão') },
+      { code: 'energia', emoji: '💪', color: 'verde', label: t('Con energía', 'Full of energy', 'Com energia') },
     ],
     next: 'good_source',
   },
@@ -34,10 +34,10 @@ export const screens = {
     type: 'choice', key: 'emocion', title: 'Emoción (más o menos)',
     prompt: t('¿Cuál se parece más a ti hoy?', 'Which one is most like you today?', 'Qual parece mais com você hoje?'),
     options: [
-      { code: 'cansancio', emoji: '🥱', label: t('Cansancio', 'Tired', 'Cansaço') },
-      { code: 'preocupacion', emoji: '😟', label: t('Preocupación', 'Worried', 'Preocupação') },
-      { code: 'confusion', emoji: '😕', label: t('Confusión', 'Confused', 'Confusão') },
-      { code: 'aburrimiento', emoji: '😑', label: t('Aburrimiento', 'Bored', 'Tédio') },
+      { code: 'cansancio', emoji: '🥱', color: 'azul', label: t('Cansancio', 'Tired', 'Cansaço') },
+      { code: 'preocupacion', emoji: '😟', color: 'morado', label: t('Mi cabeza no para', "My mind won't stop", 'Minha cabeça não para') },
+      { code: 'impulsivo', emoji: '🌀', color: 'naranja', label: t('Hago cosas sin pensar', 'Doing things without thinking', 'Faço coisas sem pensar') },
+      { code: 'aburrimiento', emoji: '😑', color: 'gris', label: t('No siento nada', "I don't feel anything", 'Não sinto nada') },
     ],
     next: 'sleep',
   },
@@ -45,10 +45,10 @@ export const screens = {
     type: 'choice', key: 'emocion', title: 'Emoción (mal)',
     prompt: t('Gracias por contarme. ¿Cuál se parece más?', 'Thanks for telling me. Which one fits best?', 'Obrigado por me contar. Qual combina mais?'),
     options: [
-      { code: 'tristeza', emoji: '😢', label: t('Tristeza', 'Sad', 'Tristeza') },
-      { code: 'ansiedad', emoji: '😰', label: t('Nervios', 'Nervous', 'Nervoso') },
-      { code: 'rabia', emoji: '😠', label: t('Rabia', 'Angry', 'Raiva') },
-      { code: 'desanimo', emoji: '😞', label: t('Sin ganas', 'Down', 'Desanimado') },
+      { code: 'tristeza', emoji: '😢', color: 'azul', label: t('Tristeza', 'Sad', 'Tristeza') },
+      { code: 'ansiedad', emoji: '😰', color: 'amarillo', label: t('Nervios, acelerado', 'Nervous, restless', 'Nervoso, agitado') },
+      { code: 'rabia', emoji: '😠', color: 'rojo', label: t('Rabia', 'Angry', 'Raiva') },
+      { code: 'desanimo', emoji: '😞', color: 'azul', label: t('Sin ganas de nada', 'No energy for anything', 'Sem vontade de nada') },
     ],
     next: 'sleep',
   },
@@ -56,10 +56,10 @@ export const screens = {
     type: 'choice', key: 'emocion', title: 'Emoción (muy mal)',
     prompt: t('Estoy aquí contigo. ¿Qué sientes más fuerte?', "I'm here with you. What feels strongest?", 'Estou aqui com você. O que está mais forte?'),
     options: [
-      { code: 'miedo', emoji: '😱', label: t('Miedo', 'Scared', 'Medo') },
-      { code: 'soledad', emoji: '💔', label: t('Soledad', 'Lonely', 'Solidão') },
-      { code: 'agotamiento', emoji: '😩', label: t('Agotamiento', 'Worn out', 'Esgotamento') },
-      { code: 'no_puedo', emoji: '🌧️', label: t('No puedo más', "I can't go on", 'Não aguento mais') },
+      { code: 'miedo', emoji: '😱', color: 'amarillo', label: t('Miedo', 'Scared', 'Medo') },
+      { code: 'soledad', emoji: '💔', color: 'azul', label: t('Soledad', 'Lonely', 'Solidão') },
+      { code: 'agotamiento', emoji: '😩', color: 'azul', label: t('Agotamiento', 'Worn out', 'Esgotamento') },
+      { code: 'no_puedo', emoji: '🌧️', color: 'azul', label: t('No puedo más', "I can't go on", 'Não aguento mais') },
     ],
     next: 'safety',
   },
@@ -154,6 +154,16 @@ export const startScreen = 'mood';
 
 // Preguntas que van después del resultado (siempre iguales).
 export const after = {
+  feelNow: {
+    key: 'animo_final',
+    prompt: t('Y ahora, ¿cómo te sientes?', 'And now, how do you feel?', 'E agora, como você se sente?'),
+    options: [
+      { code: 'bien', emoji: '😊', label: t('Bien', 'Good', 'Bem') },
+      { code: 'regular', emoji: '😐', label: t('Más o menos', 'So-so', 'Mais ou menos') },
+      { code: 'mal', emoji: '😔', label: t('Mal', 'Not good', 'Mal') },
+      { code: 'muy_mal', emoji: '😣', label: t('Muy mal', 'Really bad', 'Muito mal') },
+    ],
+  },
   helped: {
     key: 'ayudo',
     prompt: t('¿Te ayudó este momento?', 'Did this moment help?', 'Esse momento ajudou?'),
@@ -173,6 +183,45 @@ export const after = {
     ],
   },
 };
+
+// ---------- Código de colores (Dra. Emilia) ----------
+// El color nunca va solo: siempre acompaña a la palabra y a la carita. Sirve para ver patrones
+// ("3 días con rabia") y para elegir el ejercicio. Los nombres describen lo que se siente, no diagnostican.
+export const colors = {
+  verde: { hex: '#3DBE74', name: t('Bien', 'Good', 'Bem'), desc: t('Tranquilo, puedo hacer mis cosas', 'Calm, I can get things done', 'Tranquilo, consigo fazer minhas coisas') },
+  amarillo: { hex: '#F2B92F', name: t('Acelerado', 'Restless', 'Agitado'), desc: t('Nervios, no paro, muy agitado', "Nervous, can't stop, very restless", 'Nervoso, não paro, muito agitado') },
+  naranja: { hex: '#FF8A3D', name: t('Impulsivo', 'Impulsive', 'Impulsivo'), desc: t('Hago cosas sin pensar', 'Doing things without thinking', 'Faço coisas sem pensar') },
+  rojo: { hex: '#EE5A52', name: t('Con rabia', 'Angry', 'Com raiva'), desc: t('Mucha rabia o enojo', 'A lot of anger', 'Muita raiva') },
+  morado: { hex: '#9468EE', name: t('Mente que no para', "Mind that won't stop", 'Mente que não para'), desc: t('Pienso y pienso, no me calmo', "I keep thinking, I can't settle", 'Penso e penso, não me acalmo') },
+  azul: { hex: '#4A9BEA', name: t('Sin ganas', 'Low', 'Sem vontade'), desc: t('Triste o cansado, solo quiero dormir', 'Sad or tired, I just want to sleep', 'Triste ou cansado, só quero dormir') },
+  gris: { hex: '#9AA3B2', name: t('Neutro', 'Numb', 'Neutro'), desc: t('No siento nada', "I don't feel anything", 'Não sinto nada') },
+};
+
+// ---------- 3 sugerencias para mantener lo logrado ----------
+export const suggestions = {
+  dormir: { icon: 'moon', text: t('Esta noche acuéstate un poco más temprano', 'Go to bed a little earlier tonight', 'Hoje à noite, deite um pouco mais cedo') },
+  comer: { icon: 'bowl', text: t('Come algo sencillo y nutritivo', 'Eat something simple and nourishing', 'Coma algo simples e nutritivo') },
+  agua: { icon: 'drop', text: t('Toma un vaso de agua ahora', 'Drink a glass of water now', 'Beba um copo de água agora') },
+  descansar: { icon: 'bed', text: t('Dale a tu cuerpo un rato de descanso', 'Give your body some rest', 'Dê ao seu corpo um tempo de descanso') },
+  aire: { icon: 'sun', text: t('Sal 10 minutos a tomar aire', 'Step outside for 10 minutes', 'Saia 10 minutos para tomar ar') },
+  persona: { icon: 'chat', text: t('Cuéntale a alguien de confianza cómo estás', 'Tell someone you trust how you are', 'Conte a alguém de confiança como você está') },
+  una_cosa: { icon: 'check', text: t('Elige una sola cosa pequeña para hoy', 'Pick one small thing for today', 'Escolha uma única coisa pequena para hoje') },
+  pantallas: { icon: 'phone', text: t('Tómate una hora sin redes', 'Take one hour off social media', 'Fique uma hora sem redes') },
+  gracias: { icon: 'flower', text: t('Antes de dormir, di tres cosas por las que das gracias', 'Before bed, name three things you are thankful for', 'Antes de dormir, diga três coisas pelas quais é grato') },
+  versiculo: { icon: 'book', text: t('Lee tu versículo otra vez antes de dormir', 'Read your verse again before bed', 'Leia seu versículo de novo antes de dormir') },
+};
+// Qué respuesta trae qué sugerencia (en orden). Siempre se completan 3.
+export const suggestionRules = [
+  { when: { sueno: ['mal', 'poco'] }, id: 'dormir' },
+  { when: { comida: ['no', 'poco'] }, id: 'comer' },
+  { when: { cuerpo: ['enfermo', 'dolor', 'ciclo'] }, id: 'descansar' },
+  { when: { tema: ['dinero', 'trabajo', 'futuro'] }, id: 'una_cosa' },
+  { when: { tema: ['personas', 'soledad'] }, id: 'persona' },
+  { when: { tema: ['noticias'] }, id: 'pantallas' },
+  { when: { emocion: ['soledad', 'tristeza', 'desanimo'] }, id: 'persona' },
+  { when: { animo: ['bien'] }, id: 'gracias' },
+];
+export const suggestionDefaults = ['agua', 'aire', 'versiculo'];
 
 // ---------- Reglas: respuestas → factor probable (el "parecer") ----------
 // Se evalúan todas; gana el de mayor peso. Emilia ajusta pesos y condiciones.
@@ -253,22 +302,26 @@ export const validations = {
 
 // ---------- Acciones de 1 minuto ----------
 export const actions = {
-  respirar: { emoji: '🦋', interactive: 'breath', title: t('Respira con la mariposa', 'Breathe with the butterfly', 'Respire com a borboleta'), text: t('Cuando las alas se abren, toma aire. Cuando se cierran, suéltalo despacio.', 'When the wings open, breathe in. When they close, breathe out slowly.', 'Quando as asas abrirem, puxe o ar. Quando fecharem, solte devagar.') },
-  ventana: { emoji: '🪟', title: t('Ve a la ventana', 'Go to a window', 'Vá até a janela'), text: t('Mira el cielo 30 segundos y respira hondo tres veces.', 'Look at the sky for 30 seconds and take three deep breaths.', 'Olhe o céu por 30 segundos e respire fundo três vezes.') },
-  agua: { emoji: '💧', title: t('Toma agua', 'Drink water', 'Beba água'), text: t('Toma un vaso de agua despacio, sorbo a sorbo.', 'Drink a glass of water slowly, sip by sip.', 'Beba um copo de água devagar, gole a gole.') },
-  llamar: { emoji: '📞', title: t('Escribe a alguien', 'Message someone', 'Escreva para alguém'), text: t('Manda esto a alguien que te quiere: "Hola, pensé en ti".', 'Send this to someone who cares: "Hi, I thought of you."', 'Mande isto para alguém que gosta de você: "Oi, pensei em você".') },
-  voz_alta: { emoji: '🗣️', title: t('Dilo en voz alta', 'Say it out loud', 'Diga em voz alta'), text: t('Lee el versículo de abajo en voz alta tres veces.', 'Read the verse below out loud three times.', 'Leia o versículo abaixo em voz alta três vezes.') },
-  escribir: { emoji: '✏️', title: t('Escribe una línea', 'Write one line', 'Escreva uma linha'), text: t('Escribe en un papel una cosa que te preocupa. Luego dóblalo.', 'Write one worry on a piece of paper. Then fold it.', 'Escreva num papel uma coisa que te preocupa. Depois dobre.') },
-  moverse: { emoji: '🙆', title: t('Estírate', 'Stretch', 'Alongue-se'), text: t('Sube los brazos al cielo, cuenta hasta 10 y bájalos despacio.', 'Raise your arms to the sky, count to 10, and lower them slowly.', 'Levante os braços para o céu, conte até 10 e abaixe devagar.') },
-  gracias: { emoji: '🌻', title: t('Tres gracias', 'Three thanks', 'Três obrigados'), text: t('Di tres cosas por las que hoy das gracias.', 'Say three things you are thankful for today.', 'Diga três coisas pelas quais você agradece hoje.') },
+  atencion: { emoji: '🌊', icon: 'waves', interactive: 'attention', title: t('Pasea por el riachuelo', 'Walk by the creek', 'Passeie pelo riacho'), text: t('Vas a oír lluvia, agua y truenos. Pon tu atención en un solo sonido a la vez.', 'You will hear rain, water and thunder. Put your attention on one sound at a time.', 'Você vai ouvir chuva, água e trovão. Preste atenção em um som de cada vez.') },
+  bilateral: { emoji: '✨', icon: 'stars', interactive: 'bilateral', title: t('Vuela con la mariposa', 'Fly with the butterfly', 'Voe com a borboleta'), text: t('Sigue las estrellas de un lado al otro. Con audífonos, el sonido también cambia de oído.', 'Follow the stars from side to side. With headphones, the sound switches ears too.', 'Siga as estrelas de um lado para o outro. Com fone, o som também troca de ouvido.') },
+  respirar: { emoji: '🦋', icon: 'butterfly', interactive: 'breath', title: t('Respira con la mariposa', 'Breathe with the butterfly', 'Respire com a borboleta'), text: t('Cuando las alas se abren, toma aire. Cuando se cierran, suéltalo despacio.', 'When the wings open, breathe in. When they close, breathe out slowly.', 'Quando as asas abrirem, puxe o ar. Quando fecharem, solte devagar.') },
+  ventana: { icon: 'window', emoji: '🪟', title: t('Ve a la ventana', 'Go to a window', 'Vá até a janela'), text: t('Mira el cielo 30 segundos y respira hondo tres veces.', 'Look at the sky for 30 seconds and take three deep breaths.', 'Olhe o céu por 30 segundos e respire fundo três vezes.') },
+  agua: { icon: 'drop', emoji: '💧', title: t('Toma agua', 'Drink water', 'Beba água'), text: t('Toma un vaso de agua despacio, sorbo a sorbo.', 'Drink a glass of water slowly, sip by sip.', 'Beba um copo de água devagar, gole a gole.') },
+  llamar: { icon: 'chat', emoji: '📞', title: t('Escribe a alguien', 'Message someone', 'Escreva para alguém'), text: t('Manda esto a alguien que te quiere: "Hola, pensé en ti".', 'Send this to someone who cares: "Hi, I thought of you."', 'Mande isto para alguém que gosta de você: "Oi, pensei em você".') },
+  voz_alta: { icon: 'speaker', emoji: '🗣️', title: t('Dilo en voz alta', 'Say it out loud', 'Diga em voz alta'), text: t('Lee el versículo de abajo en voz alta tres veces.', 'Read the verse below out loud three times.', 'Leia o versículo abaixo em voz alta três vezes.') },
+  escribir: { icon: 'pencil', emoji: '✏️', title: t('Escribe una línea', 'Write one line', 'Escreva uma linha'), text: t('Escribe en un papel una cosa que te preocupa. Luego dóblalo.', 'Write one worry on a piece of paper. Then fold it.', 'Escreva num papel uma coisa que te preocupa. Depois dobre.') },
+  moverse: { icon: 'stretch', emoji: '🙆', title: t('Estírate', 'Stretch', 'Alongue-se'), text: t('Sube los brazos al cielo, cuenta hasta 10 y bájalos despacio.', 'Raise your arms to the sky, count to 10, and lower them slowly.', 'Levante os braços para o céu, conte até 10 e abaixe devagar.') },
+  gracias: { icon: 'flower', emoji: '🌻', title: t('Tres gracias', 'Three thanks', 'Três obrigados'), text: t('Di tres cosas por las que hoy das gracias.', 'Say three things you are thankful for today.', 'Diga três coisas pelas quais você agradece hoje.') },
 };
 
 // Emoción → acción sugerida
 export const actionByEmotion = {
-  ansiedad: 'respirar', miedo: 'respirar', preocupacion: 'escribir', confusion: 'escribir',
-  tristeza: 'ventana', desanimo: 'ventana', no_puedo: 'respirar', rabia: 'moverse',
-  cansancio: 'agua', agotamiento: 'agua', aburrimiento: 'moverse', soledad: 'llamar',
-  alegria: 'gracias', paz: 'voz_alta', gratitud: 'gracias', energia: 'llamar',
+  // Ejercicio según el color (Dra. Emilia): acelerado o mente que no para → respirar;
+  // rabia o impulsivo → bilateral; sin ganas o neutro → atención. Se edita en Admin.
+  ansiedad: 'respirar', miedo: 'respirar', preocupacion: 'respirar', no_puedo: 'respirar',
+  rabia: 'bilateral', impulsivo: 'bilateral',
+  tristeza: 'atencion', desanimo: 'atencion', cansancio: 'atencion', agotamiento: 'atencion', aburrimiento: 'atencion', soledad: 'atencion',
+  alegria: 'gracias', paz: 'atencion', gratitud: 'gracias', energia: 'llamar',
 };
 
 // ---------- Versículos ----------
@@ -282,7 +335,7 @@ export const bibleVersions = {
 };
 
 export const verses = [
-  { id: 'rom12_2', ref: t('Romanos 12:2', 'Romans 12:2', 'Romanos 12:2'), emotions: ['paz', 'energia', 'confusion'],
+  { id: 'rom12_2', ref: t('Romanos 12:2', 'Romans 12:2', 'Romanos 12:2'), emotions: ['paz', 'energia', 'impulsivo'],
     text: t('No os conforméis a este siglo; mas reformaos por la renovación de vuestro entendimiento.', 'Be not conformed to this world: but be ye transformed by the renewing of your mind.', 'Não vos conformeis com este mundo, mas transformai-vos pela renovação do vosso entendimento.'),
     reflection: t('Dios no quiere que solo repitas cosas. Quiere transformarte por dentro, como la larva que se vuelve mariposa.', "God doesn't want you to just repeat things. He wants to change you from the inside, like a caterpillar becoming a butterfly.", 'Deus não quer que você só repita coisas. Ele quer te transformar por dentro, como a lagarta que vira borboleta.') },
   { id: '1pe5_7', ref: t('1 Pedro 5:7', '1 Peter 5:7', '1 Pedro 5:7'), emotions: ['preocupacion', 'ansiedad'],
@@ -312,7 +365,7 @@ export const verses = [
   { id: 'sal4_8', ref: t('Salmos 4:8', 'Psalm 4:8', 'Salmos 4:8'), emotions: ['cansancio', 'paz'],
     text: t('En paz me acostaré, y asimismo dormiré; porque solo tú, Señor, me harás estar confiado.', 'I will both lay me down in peace, and sleep: for thou, LORD, only makest me dwell in safety.', 'Em paz também me deitarei e dormirei, porque só tu, Senhor, me fazes habitar em segurança.'),
     reflection: t('Puedes descansar. Dios sigue cuidando mientras duermes.', 'You can rest. God keeps watching over you while you sleep.', 'Você pode descansar. Deus continua cuidando enquanto você dorme.') },
-  { id: 'mt6_34', ref: t('Mateo 6:34', 'Matthew 6:34', 'Mateus 6:34'), emotions: ['preocupacion', 'confusion'],
+  { id: 'mt6_34', ref: t('Mateo 6:34', 'Matthew 6:34', 'Mateus 6:34'), emotions: ['preocupacion', 'impulsivo'],
     text: t('No os congojéis por el día de mañana; que el día de mañana traerá su fatiga: basta al día su afán.', 'Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself.', 'Não vos inquieteis, pois, pelo dia de amanhã, porque o dia de amanhã cuidará de si mesmo.'),
     reflection: t('Jesús te invita a vivir un día a la vez. Mañana tendrá su propia ayuda.', 'Jesus invites you to live one day at a time. Tomorrow will have its own help.', 'Jesus te convida a viver um dia de cada vez. O amanhã terá sua própria ajuda.') },
   { id: 'lam3_22', ref: t('Lamentaciones 3:22-23', 'Lamentations 3:22-23', 'Lamentações 3:22-23'), emotions: ['desanimo', 'tristeza', 'aburrimiento'],
@@ -373,10 +426,10 @@ export const stages = [
 
 export function defaultConfig() {
   return JSON.parse(JSON.stringify({
-    version: 1,
+    version: 2,
     publishedAt: '2026-10-17T14:00:00Z',
-    note: 'Borrador v1 del equipo de producto. Pendiente revisión clínica y teológica.',
+    note: 'Borrador v2: código de colores, 3 ejercicios y antes/después. Pendiente revisión clínica y teológica.',
     screens, startScreen, after, rules, insights, validations, actions, actionByEmotion,
-    bibleVersions, verses, helplines, crisisCopy, crisisKeywords, stages,
+    bibleVersions, verses, helplines, crisisCopy, crisisKeywords, stages, colors, suggestions, suggestionRules, suggestionDefaults,
   }));
 }

@@ -31,8 +31,10 @@ const rid = () => remote.uuid();
 const sessionPayload = (s) => { const { note, sim, ...rest } = s; return { p_s: rest }; };
 
 // ---------- Configuración (contenido editable) ----------
-export function getConfig() { return read('config', null) || defaultConfig(); }
-export function getDraft() { return read('draft', null) || getConfig(); }
+// Un contenido guardado de antes del código de colores (v1) se reemplaza por el nuevo por defecto.
+const current = (c) => (c && c.colors && c.suggestions ? c : null);
+export function getConfig() { return current(read('config', null)) || defaultConfig(); }
+export function getDraft() { return current(read('draft', null)) || getConfig(); }
 export function saveDraft(cfg) { write('draft', cfg); emit(); }
 export function discardDraft() { write('draft', null); emit(); }
 export async function publishDraft(note) {

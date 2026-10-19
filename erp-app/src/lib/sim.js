@@ -2,7 +2,7 @@
 // Siempre marcados con sim:true. Incluyen patrones plausibles (fin de mes, sueño, ciclo, noches)
 // para mostrar lo que el Lab puede detectar. No son datos de personas reales.
 import { localDateStr } from './util.js';
-import { evaluate } from './engine.js';
+import { evaluate, colorOf, suggestFor } from './engine.js';
 
 function rng(seed) {
   return function () {
@@ -87,10 +87,11 @@ function makeSession({ r, pick, pid, dt, config, baseline, cycle, cycleStart, sl
   const answers = { animo: mood };
   let emotion;
   if (mood === 'bien') emotion = pick(['alegria', 'paz', 'gratitud', 'energia'], [30, 30, 25, 15]);
-  else if (mood === 'regular') emotion = sueno !== 'bien' ? pick(['cansancio', 'preocupacion', 'confusion', 'aburrimiento'], [50, 25, 12, 13]) : pick(['cansancio', 'preocupacion', 'confusion', 'aburrimiento'], [22, 40, 18, 20]);
+  else if (mood === 'regular') emotion = sueno !== 'bien' ? pick(['cansancio', 'preocupacion', 'impulsivo', 'aburrimiento'], [50, 25, 12, 13]) : pick(['cansancio', 'preocupacion', 'impulsivo', 'aburrimiento'], [22, 40, 18, 20]);
   else if (mood === 'mal') emotion = endMonth ? pick(['tristeza', 'ansiedad', 'rabia', 'desanimo'], [18, 52, 12, 18]) : inCycle ? pick(['tristeza', 'ansiedad', 'rabia', 'desanimo'], [30, 15, 30, 25]) : hour >= 21 ? pick(['tristeza', 'ansiedad', 'rabia', 'desanimo'], [42, 25, 10, 23]) : pick(['tristeza', 'ansiedad', 'rabia', 'desanimo'], [28, 34, 16, 22]);
   else emotion = pick(['miedo', 'soledad', 'agotamiento', 'no_puedo'], endMonth ? [45, 15, 25, 15] : hour >= 21 ? [18, 42, 22, 18] : [25, 28, 32, 15]);
   answers.emocion = emotion;
+  answers.color = colorOf(config, emotion);
 
   const path = ['mood', { bien: 'feel_good', regular: 'feel_meh', mal: 'feel_bad', muy_mal: 'feel_worst' }[mood]];
   let crisis = false;
@@ -137,13 +138,18 @@ function makeSession({ r, pick, pid, dt, config, baseline, cycle, cycleStart, sl
     helped = actionDone ? pick(['si', 'poco', 'no'], [62, 29, 9]) : pick(['si', 'poco', 'no'], [34, 38, 28]);
     frequency = mood === 'bien' ? pick(['hoy', 'dias', 'siempre'], [50, 30, 20]) : diff > 1.1 ? pick(['hoy', 'dias', 'siempre'], [25, 40, 35]) : pick(['hoy', 'dias', 'siempre'], [55, 32, 13]);
     answers.ayudo = helped; answers.frecuencia = frequency;
+    // ¿Cómo te sientes ahora? Mejora más cuando hizo el ejercicio.
+    const ladder = ['muy_mal', 'mal', 'regular', 'bien'];
+    const i0 = ladder.indexOf(mood);
+    const up = actionDone ? pick([0, 1, 2], [38, 50, 12]) : pick([-1, 0, 1], [8, 70, 22]);
+    answers.animo_final = ladder[Math.max(0, Math.min(3, i0 + up))];
   }
 
   return {
     sid: 's' + dt.getTime().toString(36) + Math.floor(r() * 1e6).toString(36), pid, sim: true,
     startedAt: dt.toISOString(), localDate: localDateStr(dt), hour, dow, dom, tzOffset: 0, configVersion: 1,
     answers, path, completed, lastScreen, crisis, crisisReason: crisis ? answers.seguridad : null,
-    factor: ev.factor || null, actionId: ev.actionId || null, verseId: ev.verseId || null,
+    factor: ev.factor || null, actionId: ev.actionId || null, verseId: ev.verseId || null, suggestions: completed ? suggestFor(config, answers) : null,
     actionDone: actionDone ?? null, durationMs: Math.round(35000 + r() * 70000),
   };
 }

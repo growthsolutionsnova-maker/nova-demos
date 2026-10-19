@@ -5,6 +5,7 @@ import { validateConfig } from '../lib/engine.js';
 import { defaultConfig } from '../lib/content.js';
 import ToolShell from '../ToolShell.jsx';
 import { tx, toolLang, locale } from '../tx.js';
+import { Icon, Face, iconFor, exprForEmotion, exprForMood, ICON_NAMES } from '../app/icons.jsx';
 
 const LANGS = [['es', 'Español'], ['en', 'English'], ['pt', 'Português']];
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -128,10 +129,21 @@ function FlowEditor({ draft, lang, update }) {
           <label className="field"><span><b>{tx('Variable para análisis')}</b></span><input className="in" id="sc-key" value={s.key} onChange={(e) => update((d) => { d.screens[id].key = e.target.value.replace(/[^a-z0-9_]/gi, '_').toLowerCase(); })} /></label>
         </div>
         <label className="field"><span><b>{tx('Pregunta')} ({lang.toUpperCase()})</b></span><input className="in" id="sc-prompt" value={s.prompt?.[lang] || ''} placeholder={s.prompt?.es} onChange={(e) => update((d) => { d.screens[id].prompt[lang] = e.target.value; })} /></label>
-        <div className="optrow hdr"><span>Emoji</span><span>{tx('Código')}</span><span>{tx('Texto')} ({lang.toUpperCase()})</span><span>{tx('Después va a')}</span><span /></div>
+        <div className="optrow hdr"><span>{s.key === 'emocion' ? tx('Color') : tx('Ícono')}</span><span>{tx('Código')}</span><span>{tx('Texto')} ({lang.toUpperCase()})</span><span>{tx('Después va a')}</span><span /></div>
         {s.options.map((o, i) => (
           <div className="optrow" key={i}>
-            <input className="in emo" aria-label="Emoji" value={o.emoji} onChange={(e) => update((d) => { d.screens[id].options[i].emoji = e.target.value; })} />
+            {s.key === 'emocion' ? (
+              <select className="in" aria-label={tx('Color')} value={o.color || ''} onChange={(e) => update((d) => { d.screens[id].options[i].color = e.target.value; })} style={{ borderLeft: `8px solid ${draft.colors?.[o.color]?.hex || 'var(--line)'}` }}>
+                <option value="">—</option>
+                {Object.entries(draft.colors || {}).map(([k, c]) => <option key={k} value={k}>{c.name[lang] || c.name.es}</option>)}
+              </select>
+            ) : s.key === 'animo' ? (
+              <span className="in" style={{ display: 'grid', placeItems: 'center' }}><Face expr={exprForMood(o.code)} color="#FFF1CC" size={30} /></span>
+            ) : (
+              <select className="in" aria-label={tx('Ícono')} value={iconFor(s.key, o)} onChange={(e) => update((d) => { d.screens[id].options[i].icon = e.target.value; })}>
+                {ICON_NAMES().map((n) => <option key={n} value={n}>{n}</option>)}
+              </select>
+            )}
             <input className="in c-code" aria-label={tx('Código')} value={o.code} onChange={(e) => update((d) => { d.screens[id].options[i].code = e.target.value.replace(/[^a-z0-9_]/gi, '_').toLowerCase(); })} />
             <input className="in" aria-label={tx('Texto')} value={o.label?.[lang] || ''} placeholder={o.label?.es} onChange={(e) => update((d) => { d.screens[id].options[i].label[lang] = e.target.value; })} />
             <select className="in c-next" aria-label={tx('Después va a')} value={o.next || ''} onChange={(e) => update((d) => { if (e.target.value) d.screens[id].options[i].next = e.target.value; else delete d.screens[id].options[i].next; })}>
@@ -153,7 +165,15 @@ function FlowEditor({ draft, lang, update }) {
           <b style={{ fontSize: '0.88rem' }}>{tx('Vista previa')}</b>
           <div className="preview">
             <h3 style={{ fontSize: '1.3rem', marginBottom: 12 }}>{s.prompt?.[lang] || <span className="muted">{tx('Sin traducir')}</span>}</h3>
-            <div className={'options n' + s.options.length}>{s.options.map((o, i) => <div key={i} className="opt"><span className="e">{o.emoji}</span>{o.label?.[lang] || <span className="muted">—</span>}</div>)}</div>
+            <div className={'options n' + s.options.length}>{s.options.map((o, i) => (
+              <div key={i} className="opt">
+                {s.key === 'emocion' ? <Face expr={exprForEmotion(o.code)} color={draft.colors?.[o.color]?.hex || '#fff'} size={48} />
+                  : s.key === 'animo' ? <Face expr={exprForMood(o.code)} color="#FFF1CC" size={48} />
+                  : <span className="opt-ic"><Icon name={iconFor(s.key, o)} size={26} /></span>}
+                <span>{o.label?.[lang] || <span className="muted">—</span>}</span>
+                {s.key === 'emocion' && o.color && <span className="opt-color"><i style={{ background: draft.colors?.[o.color]?.hex }} />{draft.colors?.[o.color]?.name[lang]}</span>}
+              </div>
+            ))}</div>
           </div>
         </div>
       </div>
@@ -202,7 +222,7 @@ function Actions({ draft, lang, update }) {
         <h2>{tx('Acciones')} ({lang.toUpperCase()})</h2>
         {Object.entries(draft.actions).map(([k, a]) => (
           <div key={k} className="field" style={{ borderBottom: '1px solid var(--line)', paddingBottom: 10 }}>
-            <span><b>{a.emoji} {k}</b>{a.interactive ? <span className="pill" style={{ marginLeft: 8 }}>{tx('interactiva')}</span> : null}</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Icon name={a.icon || 'sparkle'} size={18} /><b>{k}</b>{a.interactive ? <span className="pill" style={{ marginLeft: 8 }}>{tx('interactiva')}</span> : null}</span>
             <input className="in" value={a.title[lang] || ''} placeholder={a.title.es} onChange={(e) => update((d) => { d.actions[k].title[lang] = e.target.value; })} />
             <textarea className="in" rows={2} value={a.text[lang] || ''} placeholder={a.text.es} onChange={(e) => update((d) => { d.actions[k].text[lang] = e.target.value; })} />
           </div>
@@ -212,7 +232,7 @@ function Actions({ draft, lang, update }) {
         <h2>{tx('¿Qué acción para cada emoción?')}</h2>
         <div className="tbl-wrap"><table className="tbl"><tbody>
           {emotions.map((o) => (
-            <tr key={o.code}><td>{o.emoji} {o.label[lang] || o.label.es}</td><td><select className="in" value={draft.actionByEmotion[o.code] || ''} onChange={(e) => update((d) => { d.actionByEmotion[o.code] = e.target.value; })}>{Object.entries(draft.actions).map(([k, a]) => <option key={k} value={k}>{a.emoji} {a.title[lang] || a.title.es}</option>)}</select></td></tr>
+            <tr key={o.code}><td><i className="cdot" style={{ background: draft.colors?.[o.color]?.hex }} />{o.label[lang] || o.label.es}</td><td><select className="in" value={draft.actionByEmotion[o.code] || ''} onChange={(e) => update((d) => { d.actionByEmotion[o.code] = e.target.value; })}>{Object.entries(draft.actions).map(([k, a]) => <option key={k} value={k}>{a.title[lang] || a.title.es}</option>)}</select></td></tr>
           ))}
         </tbody></table></div>
       </div>

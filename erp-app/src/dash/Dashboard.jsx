@@ -22,10 +22,11 @@ export default function Dashboard() {
   const k = kpis(data, days);
   const series = dailySeries(data, days);
   const fun = funnel(data, days);
-  const emoLabel = (code) => {
-    for (const s of Object.values(config.screens)) if (s.key === 'emocion') { const o = s.options.find((x) => x.code === code); if (o) return `${o.emoji} ${o.label[lang] || o.label.es}`; }
-    return code;
-  };
+  const emoOpt = (code) => { for (const s of Object.values(config.screens)) if (s.key === 'emocion') { const o = s.options.find((x) => x.code === code); if (o) return o; } return null; };
+  const emoLabel = (code) => { const o = emoOpt(code); return o ? (o.label[lang] || o.label.es) : code; };
+  const emoColor = (code) => config.colors?.[emoOpt(code)?.color]?.hex;
+  const cols = distribution(data, 'color', days);
+  const totalCol = cols.reduce((a, b) => a + b[1], 0) || 1;
   const emos = distribution(data, 'emocion', days);
   const totalEmo = emos.reduce((a, b) => a + b[1], 0) || 1;
   const hm = hourMatrix(data, days);
@@ -40,7 +41,7 @@ export default function Dashboard() {
   const helpedBy = (() => {
     const c = new Map();
     S.filter((s) => s.completed && s.actionId && s.answers.ayudo).forEach((s) => { const x = c.get(s.actionId) || { n: 0, y: 0 }; x.n++; if (s.answers.ayudo === 'si') x.y++; c.set(s.actionId, x); });
-    return [...c.entries()].map(([a, x]) => ({ label: `${config.actions[a]?.emoji || ''} ${config.actions[a]?.title[lang] || config.actions[a]?.title.es || a}`, value: x.y / x.n, n: x.n })).sort((a, b) => b.value - a.value);
+    return [...c.entries()].map(([a, x]) => ({ label: `${config.actions[a]?.title[lang] || config.actions[a]?.title.es || a}`, value: x.y / x.n, n: x.n })).sort((a, b) => b.value - a.value);
   })();
   const realCount = data.sessions.filter((s) => !s.sim).length;
   const crisisReasons = distribution({ sessions: S.filter((s) => s.crisis).map((s) => ({ ...s, answers: { r: s.crisisReason } })) }, 'r', days);
@@ -64,6 +65,7 @@ export default function Dashboard() {
         <div className="kpi"><span className="v">{k.people}</span><span className="l">{tx('Personas activas')}</span></div>
         <div className="kpi"><span className="v">{k.sessions}</span><span className="l">{tx('Check-ins iniciados')}</span></div>
         <div className="kpi"><span className="v">{pct(k.completion)}</span><span className="l">{tx('Completan el check-in')}</span></div>
+        <div className="kpi"><span className="v">{pct(k.improved)}</span><span className="l">{tx('Se sienten mejor al final (antes → después)')}</span></div>
         <div className="kpi"><span className="v">{pct(k.helped)}</span><span className="l">{tx('Dicen que les ayudó (sí o un poco)')}</span></div>
         <div className="kpi"><span className="v">{pct(k.d1)}</span><span className="l">{tx('Vuelven al día siguiente (D1, n={n})', { n: k.cohort1 })}</span></div>
         <div className="kpi"><span className="v">{pct(k.d7)}</span><span className="l">{tx('Siguen a la semana (D7, n={n})', { n: k.cohort7 })}</span></div>
@@ -86,9 +88,14 @@ export default function Dashboard() {
       <section id="emociones" className="grid2">
         <div className="panel">
           <h2>{tx('Emociones registradas')}</h2>
-          <HBars items={emos.slice(0, 12).map(([c, n]) => ({ label: emoLabel(c), value: n / totalEmo }))} fmt={pct} />
+          <HBars items={emos.slice(0, 16).map(([c, n]) => ({ label: emoLabel(c), value: n / totalEmo, color: emoColor(c) }))} fmt={pct} />
         </div>
         <div className="panel">
+          <h2>{tx('Código de colores')}</h2>
+          <div className="sub">{tx('Cada color acompaña a una emoción. Sirve para ver patrones, no diagnostica.')}</div>
+          <HBars items={cols.map(([c, n]) => ({ label: (config.colors[c]?.name[lang] || c), value: n / totalCol, color: config.colors[c]?.hex }))} fmt={pct} />
+        </div>
+        <div className="panel" style={{ gridColumn: '1 / -1' }}>
           <h2>{tx('¿Qué acción ayuda más?')}</h2>
           <div className="sub">{tx('% que responde "sí, me ayudó" después de cada acción')}</div>
           <HBars items={helpedBy.map((h) => ({ label: h.label, value: h.value }))} fmt={pct} color="var(--leaf)" />

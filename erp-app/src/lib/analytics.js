@@ -1,6 +1,7 @@
 // Cálculos para Dashboard y Lab. Todo sobre datos seudónimos (sin email).
 import { localDateStr } from './util.js';
 import { tx } from '../tx.js';
+import { colorOf as colorOfCfg, change as chg } from './engine.js';
 
 let LANG = 'es';
 const L = (o) => (o && (o[LANG] || o.es || o)) || '';
@@ -11,9 +12,9 @@ export function codebook(config, lang = 'es') {
   const fromKey = (key) => {
     const vals = []; const seen = new Set();
     for (const s of Object.values(config.screens)) if (s.key === key) for (const o of s.options) {
-      if (!seen.has(o.code) && o.code !== 'otra') { seen.add(o.code); vals.push({ code: o.code, label: `${o.emoji} ${L(o.label)}` }); }
+      if (!seen.has(o.code) && o.code !== 'otra') { seen.add(o.code); vals.push({ code: o.code, label: L(o.label) }); }
     }
-    for (const a of Object.values(config.after)) if (a.key === key) for (const o of a.options) vals.push({ code: o.code, label: `${o.emoji} ${L(o.label)}` });
+    for (const a of Object.values(config.after)) if (a.key === key) for (const o of a.options) vals.push({ code: o.code, label: L(o.label) });
     return vals;
   };
   const titleOf = (key) => {
@@ -32,7 +33,10 @@ export function codebook(config, lang = 'es') {
     ans('necesidad', tx('Necesidad (reflexión)')),
     ans('fuente_bien', tx('Qué ayudó (días buenos)')),
     ans('ayudo', tx('¿Te ayudó?')),
+    ans('animo_final', tx('Ánimo al final')),
     ans('frecuencia', tx('Frecuencia')),
+    { id: 'color', label: tx('Color emocional'), group: 'Respuestas', get: (s) => s.answers?.color ?? colorOfCfg(config, s.answers?.emocion), values: Object.entries(config.colors || {}).map(([k, c]) => ({ code: k, label: L(c.name) })) },
+    { id: 'cambio', label: tx('Cambio antes → después'), group: 'Motor', get: (s) => chg(s.answers?.animo, s.answers?.animo_final), values: [{ code: 'mejor', label: tx('Mejoró') }, { code: 'igual', label: tx('Igual') }, { code: 'peor', label: tx('Empeoró') }] },
     { id: 'factor', label: tx('Factor probable (regla)'), group: 'Motor', get: (s) => s.factor, values: Object.keys(config.insights).map((k) => ({ code: k, label: k })) },
     { id: 'momento', label: tx('Momento del día'), group: 'Tiempo', get: (s) => (s.hour < 12 ? 'manana' : s.hour < 18 ? 'tarde' : 'noche'), values: [{ code: 'manana', label: tx('Mañana') }, { code: 'tarde', label: tx('Tarde') }, { code: 'noche', label: tx('Noche') }] },
     { id: 'dia_semana', label: tx('Día de la semana'), group: 'Tiempo', get: (s) => String(s.dow), values: [1, 2, 3, 4, 5, 6, 0].map((d) => ({ code: String(d), label: dows[d] })) },
@@ -118,6 +122,7 @@ export function kpis(data, days = 30) {
     d1: r1 / (c1 || 1), d7: r7 / (c7 || 1), cohort1: c1, cohort7: c7,
     northStar: reflected / (people.size || 1) / weeks,
     crisis: S.filter((s) => s.crisis).length,
+    improved: (() => { const w = done.filter((s) => s.answers.animo_final && s.answers.animo !== 'bien'); return w.filter((s) => chg(s.answers.animo, s.answers.animo_final) === 'mejor').length / (w.length || 1); })(),
   };
 }
 
@@ -194,7 +199,7 @@ export function toCSV(data, config) {
 export function codebookCSV(config, lang = 'es') {
   const lines = ['variable,etiqueta,pregunta,codigo,etiqueta_valor'];
   const esc = (s) => '"' + String(s ?? '').replace(/"/g, '""') + '"';
-  for (const v of codebook(config, lang)) for (const val of v.values) lines.push([v.id, esc(v.label), esc(v.question || ''), val.code, esc(val.label.replace(/^\S+\s/, ''))].join(','));
+  for (const v of codebook(config, lang)) for (const val of v.values) lines.push([v.id, esc(v.label), esc(v.question || ''), val.code, esc(val.label)].join(','));
   return lines.join('\n');
 }
 
@@ -206,7 +211,7 @@ export function spssSyntax(config, lang = 'es') {
   out += vars.map((v) => `  ${v.id} A16`).join('\n') + '\n  accion A16 accion_hecha F1.0 versiculo A16 duracion_seg F4.0.\n\nVARIABLE LABELS\n';
   out += vars.map((v) => `  ${v.id} ${q(v.label)}`).join('\n') + '.\n\n';
   for (const v of vars) {
-    out += `VALUE LABELS ${v.id}\n` + v.values.map((val) => `  ${q(val.code)} ${q(val.label.replace(/^\S+\s/, ''))}`).join('\n') + '.\n';
+    out += `VALUE LABELS ${v.id}\n` + v.values.map((val) => `  ${q(val.code)} ${q(val.label)}`).join('\n') + '.\n';
   }
   return out + '\nEXECUTE.\n';
 }

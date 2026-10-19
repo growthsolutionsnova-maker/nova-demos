@@ -7,6 +7,7 @@ import Admin from './admin/Admin.jsx';
 import Dashboard from './dash/Dashboard.jsx';
 import Lab from './lab/Lab.jsx';
 import Creature from './app/Creature.jsx';
+import { Icon } from './app/icons.jsx';
 
 function useHash() {
   const [h, setH] = useState(() => (location.hash || '').replace('#', ''));
@@ -62,7 +63,7 @@ const T = {
     teamOnly: 'Este acesso é para a equipe.', back: '← Voltar aos acessos', checking: 'Verificando acesso…', noPerm: 'Sua conta não tem permissão para esta seção.',
   },
 };
-const DOORS = { admin: ['🛠️', 'Admin'], dashboard: ['📊', 'Dashboard'], lab: ['🔬', 'Lab'] };
+const DOORS = { admin: ['pencil', 'Admin'], dashboard: ['chart', 'Dashboard'], lab: ['flask', 'Lab'] };
 
 function getSiteLang() {
   try { const l = localStorage.getItem('erp.v1.siteLang'); if (l && T[l]) return l; } catch { /* */ }
@@ -96,7 +97,7 @@ function Access() {
       </div>
       <div className="doors">
         <div className="door main">
-          <span style={{ fontSize: 34 }} aria-hidden>🐛</span>
+          <span className="door-ic"><Icon name="leaf" size={30} /></span>
           <h2>{t.appTitle}</h2>
           <span className="who">{t.appWho}</span>
           <p style={{ margin: 0 }}>{t.appBody}</p>
@@ -105,7 +106,7 @@ function Access() {
         </div>
         {Object.entries(DOORS).map(([k, [e, name]]) => (
           <div className="door" key={k}>
-            <h2><span aria-hidden>{e}</span> {name}</h2>
+            <h2 className="door-h"><span className="door-ic sm"><Icon name={e} size={22} /></span>{name}</h2>
             <p style={{ margin: 0, fontSize: '0.95rem' }}>{t[k]}</p>
             {store.live ? <a className="btn small ghost" style={{ alignSelf: 'flex-start', textDecoration: 'none' }} href={'#' + k}>{t.enter} {name}</a> : pending === k ? (
               <form className="login" onSubmit={(ev) => { ev.preventDefault(); store.setSessionRole(store.demoAccounts[k].role); location.hash = k; }}>
@@ -157,7 +158,7 @@ function Gate({ area, children }) {
     <div className="access" style={{ justifyContent: 'center' }}>
       <LangSwitch lang={lang} setLang={setLang} />
       <div className="door" style={{ maxWidth: 420, width: '100%' }}>
-        <h2>{DOORS[area][0]} {DOORS[area][1]}</h2>
+        <h2 className="door-h"><span className="door-ic sm"><Icon name={DOORS[area][0]} size={22} /></span>{DOORS[area][1]}</h2>
         <p style={{ margin: 0 }}>{t.teamOnly}</p>
         {store.live ? (
           <>

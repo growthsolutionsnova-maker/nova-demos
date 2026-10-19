@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { defaultConfig } from '../src/lib/content.js';
-import { nextStep, evaluate, detectCrisis, validateConfig, stageFor } from '../src/lib/engine.js';
+import { nextStep, evaluate, detectCrisis, validateConfig, stageFor, colorOf, suggestFor, change } from '../src/lib/engine.js';
 import { simulate } from '../src/lib/sim.js';
 import { kpis, crosstab, codebook, byDayOfMonth, funnel, toCSV, spssSyntax } from '../src/lib/analytics.js';
 
@@ -32,7 +32,7 @@ test('reglas: elige el factor de mayor peso', () => {
   assert.equal(evaluate(cfg, { animo: 'mal', emocion: 'ansiedad', sueno: 'mal', tema: 'dinero' }).factor, 'sueno');
   assert.equal(evaluate(cfg, { animo: 'mal', emocion: 'ansiedad', sueno: 'bien', comida: 'si', cuerpo: 'bien', tema: 'dinero' }).factor, 'dinero');
   assert.equal(evaluate(cfg, { animo: 'bien', emocion: 'paz' }).factor, 'positivo');
-  assert.equal(evaluate(cfg, { animo: 'regular', emocion: 'confusion', sueno: 'bien', comida: 'si', cuerpo: 'bien', tema: 'nada' }).factor, 'ninguno');
+  assert.equal(evaluate(cfg, { animo: 'regular', emocion: 'impulsivo', sueno: 'bien', comida: 'si', cuerpo: 'bien', tema: 'nada' }).factor, 'ninguno');
 });
 
 test('metamorfosis por etapas', () => {
@@ -55,4 +55,26 @@ test('simulación + analítica', () => {
   console.log('funnel', funnel(d).map((f) => f.step + ':' + Math.round(f.rate * 100)).join(' '));
   const csv = toCSV(d, cfg); assert.ok(csv.split('\n').length === d.sessions.length + 1);
   assert.ok(spssSyntax(cfg).includes('VALUE LABELS emocion'));
+});
+
+test('código de colores: cada emoción tiene un color que existe', () => {
+  for (const sc of Object.values(cfg.screens)) if (sc.key === 'emocion') for (const o of sc.options) {
+    assert.ok(cfg.colors[o.color], `${o.code} sin color válido`);
+  }
+  assert.equal(colorOf(cfg, 'rabia'), 'rojo');
+  assert.equal(colorOf(cfg, 'preocupacion'), 'morado');
+});
+
+test('ejercicio según color: acelerado → respirar, rabia → bilateral, sin ganas → atención', () => {
+  assert.equal(evaluate(cfg, { animo: 'mal', emocion: 'ansiedad' }).actionId, 'respirar');
+  assert.equal(evaluate(cfg, { animo: 'mal', emocion: 'rabia' }).actionId, 'bilateral');
+  assert.equal(evaluate(cfg, { animo: 'mal', emocion: 'desanimo' }).actionId, 'atencion');
+});
+
+test('antes/después y siempre 3 sugerencias', () => {
+  assert.equal(change('mal', 'bien'), 'mejor');
+  assert.equal(change('bien', 'mal'), 'peor');
+  assert.equal(change('regular', 'regular'), 'igual');
+  assert.equal(suggestFor(cfg, { animo: 'mal' }).length, 3);
+  assert.deepEqual(suggestFor(cfg, { animo: 'mal', sueno: 'mal', comida: 'no', tema: 'dinero' }), ['dormir', 'comer', 'una_cosa']);
 });

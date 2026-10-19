@@ -142,8 +142,12 @@ export default function Creature({ stage = 'larvita', mood = 'bien', size = 200,
       {stage === 'capullo' && <Chrysalis mood={mood} />}
       {stage === 'capullo_luz' && <Chrysalis mood={mood} glow />}
       {stage === 'mariposa' && <g className="float"><Butterfly mood={mood} scale={0.95} /></g>}
-      {celebrate && [[40, 40], [200, 50], [30, 120], [210, 130], [120, 12]].map(([x, y], i) => (
-        <text key={i} x={x} y={y} className="confetti" style={{ animationDelay: `${i * 0.15}s`, fontSize: 18 }}>{['🍃', '✨', '🍃', '✨', '🌟'][i]}</text>
+      {celebrate && [[40, 40], [200, 50], [30, 120], [210, 130], [120, 14]].map(([x, y], i) => (
+        <g key={i} className="confetti" style={{ animationDelay: `${i * 0.15}s` }}>
+          {i % 2 === 0
+            ? <path d={`M${x} ${y + 8} C${x - 2} ${y - 2} ${x + 6} ${y - 8} ${x + 14} ${y - 8} C${x + 14} ${y} ${x + 8} ${y + 8} ${x} ${y + 8}Z`} style={{ fill: 'var(--leaf)', stroke: 'var(--creature-ink)', strokeWidth: 1.5 }} />
+            : <path d={`M${x} ${y - 9} L${x + 2.5} ${y - 2.5} L${x + 9} ${y} L${x + 2.5} ${y + 2.5} L${x} ${y + 9} L${x - 2.5} ${y + 2.5} L${x - 9} ${y} L${x - 2.5} ${y - 2.5}Z`} style={{ fill: 'var(--sun)', stroke: 'var(--creature-ink)', strokeWidth: 1.5 }} />}
+        </g>
       ))}
     </svg>
   );

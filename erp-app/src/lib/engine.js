@@ -91,3 +91,39 @@ export function validateConfig(config) {
   }
   return issues;
 }
+
+// ---------- Código de colores ----------
+export function colorOf(config, emotion) {
+  if (!emotion) return null;
+  for (const s of Object.values(config.screens)) if (s.key === 'emocion') {
+    const o = s.options.find((x) => x.code === emotion);
+    if (o && o.color) return o.color;
+  }
+  return null;
+}
+export function emotionOption(config, emotion) {
+  for (const s of Object.values(config.screens)) if (s.key === 'emocion') {
+    const o = s.options.find((x) => x.code === emotion);
+    if (o) return o;
+  }
+  return null;
+}
+
+// ---------- Antes y después ----------
+export const MOOD_RANK = { muy_mal: 0, mal: 1, regular: 2, bien: 3 };
+export function change(before, after) {
+  if (!(before in MOOD_RANK) || !(after in MOOD_RANK)) return null;
+  const d = MOOD_RANK[after] - MOOD_RANK[before];
+  return d > 0 ? 'mejor' : d < 0 ? 'peor' : 'igual';
+}
+
+// ---------- 3 sugerencias ----------
+export function suggestFor(config, answers) {
+  const out = [];
+  for (const r of config.suggestionRules || []) {
+    const ok = Object.entries(r.when).every(([k, codes]) => codes.includes(answers[k]));
+    if (ok && !out.includes(r.id) && config.suggestions[r.id]) out.push(r.id);
+  }
+  for (const d of config.suggestionDefaults || []) if (out.length < 3 && !out.includes(d)) out.push(d);
+  return out.slice(0, 3);
+}

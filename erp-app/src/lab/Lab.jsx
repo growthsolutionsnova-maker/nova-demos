@@ -7,15 +7,9 @@ import { LiveBar } from '../dash/Dashboard.jsx';
 import { Bars, heatBg } from '../charts.jsx';
 import { tx, toolLang, locale, DOWS } from '../tx.js';
 
-const PRESETS = [['sueno', 'animo'], ['fase_mes', 'tema'], ['momento', 'emocion'], ['cuerpo', 'emocion'], ['emocion', 'ayudo']];
-const GROUPS = {
-  ansiedad: ['Nervios, preocupación y miedo', ['ansiedad', 'preocupacion', 'miedo']],
-  tristeza: ['Tristeza y sin ganas', ['tristeza', 'desanimo', 'no_puedo']],
-  rabia: ['Rabia', ['rabia']],
-  cansancio: ['Cansancio y agotamiento', ['cansancio', 'agotamiento']],
-  soledad: ['Soledad', ['soledad']],
-  bien: ['Emociones agradables', ['alegria', 'paz', 'gratitud', 'energia']],
-};
+const PRESETS = [['sueno', 'animo'], ['fase_mes', 'color'], ['momento', 'color'], ['cuerpo', 'emocion'], ['color', 'cambio']];
+// Patrones en el tiempo por color emocional (cada color agrupa varias emociones).
+const COLOR_ORDER = ['amarillo', 'morado', 'rojo', 'naranja', 'azul', 'gris', 'verde'];
 
 export default function Lab() {
   useStore();
@@ -46,7 +40,7 @@ export default function Lab() {
       <LiveBar st={st} realCount={raw.sessions.filter((s) => !s.sim).length} />
       {sim && <div className="note warn">{tx('Incluye datos simulados con patrones inventados (fin de mes, sueño, ciclo) para mostrar lo que el Lab puede encontrar. No son conclusiones.')}</div>}
       {sec === 'cruces' && <Cross data={data} vars={vars} />}
-      {sec === 'mes' && <Time data={data} />}
+      {sec === 'mes' && <Time data={data} config={config} lang={lang} />}
       {sec === 'personas' && <People data={data} config={config} />}
       {sec === 'exportar' && <Export data={data} config={config} onlyConsent={onlyConsent} />}
       {sec === 'diccionario' && <Dict vars={vars} />}
@@ -108,29 +102,31 @@ function Cross({ data, vars }) {
   );
 }
 
-function Time({ data }) {
-  const [g, setG] = useState('ansiedad');
-  const dm = byDayOfMonth(data, 'emocion', GROUPS[g][1]);
+function Time({ data, config, lang }) {
+  const [g, setG] = useState('amarillo');
+  const colorName = (k) => config.colors[k]?.name[lang] || k;
+  const has = (s) => s.answers.color === g;
+  const dm = byDayOfMonth(data, 'color', [g]);
   const total = dm.reduce((a, b) => a + b.n, 0) || 1;
   const avg = dm.reduce((a, b) => a + b.rate * b.n, 0) / total;
   const dows = [1, 2, 3, 4, 5, 6, 0].map((d) => {
-    const S = data.sessions.filter((s) => s.dow === d && s.answers.emocion);
-    return { label: DOWS()[d], value: S.length ? S.filter((s) => GROUPS[g][1].includes(s.answers.emocion)).length / S.length : 0 };
+    const S = data.sessions.filter((s) => s.dow === d && s.answers.color);
+    return { label: DOWS()[d], value: S.length ? S.filter(has).length / S.length : 0, color: config.colors[g]?.hex };
   });
   const hours = [[tx('Madrugada (0–5)'), 0, 5], [tx('Mañana (6–11)'), 6, 11], [tx('Tarde (12–17)'), 12, 17], [tx('Noche (18–23)'), 18, 23]].map(([l, a, b]) => {
-    const S = data.sessions.filter((s) => s.hour >= a && s.hour <= b && s.answers.emocion);
-    return { label: l, value: S.length ? S.filter((s) => GROUPS[g][1].includes(s.answers.emocion)).length / S.length : 0 };
+    const S = data.sessions.filter((s) => s.hour >= a && s.hour <= b && s.answers.color);
+    return { label: l, value: S.length ? S.filter(has).length / S.length : 0, color: config.colors[g]?.hex };
   });
   return (
     <>
       <div className="panel">
-        <div className="ctrl"><b>{tx('Emoción')}</b><div className="segm" role="group" aria-label={tx('Emoción')}>{Object.entries(GROUPS).map(([k, [l]]) => <button key={k} className={g === k ? 'on' : ''} onClick={() => setG(k)}>{tx(l)}</button>)}</div></div>
+        <div className="ctrl"><b>{tx('Color emocional')}</b><div className="segm" role="group" aria-label={tx('Color emocional')}>{COLOR_ORDER.map((k) => <button key={k} className={g === k ? 'on' : ''} onClick={() => setG(k)}><i className="cdot" style={{ background: config.colors[k]?.hex }} />{colorName(k)}</button>)}</div></div>
       </div>
       <div className="panel">
         <h2>{tx('Por día del mes')}</h2>
-        <div className="sub">{tx('% de check-ins con "{g}" según el día del mes. Línea punteada: promedio ({n} %).', { g: tx(GROUPS[g][0]).toLowerCase(), n: Math.round(avg * 100) })}</div>
-        <Bars data={dm.map((d) => ({ label: d.d, value: Math.round(d.rate * 100), color: d.rate > avg * 1.3 ? 'var(--coral)' : 'var(--wing)', dim: d.n < 8 }))} fmt={(v) => v + '%'} refLine={Math.round(avg * 100)} labelEvery={2} width={900} height={240} ariaLabel={tx('Por día del mes')} />
-        <div className="sub">{tx('Coral: más de 30 % por encima del promedio. Barras claras: menos de 8 check-ins ese día.')}</div>
+        <div className="sub">{tx('% de check-ins con "{g}" según el día del mes. Línea punteada: promedio ({n} %).', { g: colorName(g).toLowerCase(), n: Math.round(avg * 100) })}</div>
+        <Bars data={dm.map((d) => ({ label: d.d, value: Math.round(d.rate * 100), color: d.rate > avg * 1.3 ? 'var(--ink)' : (config.colors[g]?.hex || 'var(--wing)'), dim: d.n < 8 }))} fmt={(v) => v + '%'} refLine={Math.round(avg * 100)} labelEvery={2} width={900} height={240} ariaLabel={tx('Por día del mes')} />
+        <div className="sub">{tx('Barras oscuras: más de 30 % por encima del promedio. Barras claras: menos de 8 check-ins ese día.')}</div>
       </div>
       <div className="grid2">
         <div className="panel"><h2>{tx('Por día de la semana')}</h2><Bars data={dows.map((d) => ({ ...d, value: Math.round(d.value * 100) }))} fmt={(v) => v + '%'} height={170} /></div>
@@ -141,8 +137,9 @@ function Time({ data }) {
 }
 
 function emojiOf(config, s) {
-  for (const sc of Object.values(config.screens)) if (sc.key === 'emocion') { const o = sc.options.find((x) => x.code === s.answers.emocion); if (o) return o.emoji; }
-  return s.crisis ? '🛟' : '·';
+  const hex = config.colors?.[s.answers?.color]?.hex;
+  if (s.crisis) return <i className="cdot crisis" title="crisis" />;
+  return <i className="cdot" style={{ background: hex || 'var(--line)' }} />;
 }
 
 function People({ data, config }) {
