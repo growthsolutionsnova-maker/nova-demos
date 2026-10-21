@@ -33,6 +33,9 @@
   --hill: #7BCB6F;
   --hill-2: #A5DE8F;
   --sky-ring: #58B9F2;
+  --bud-1: #2FB56C;
+  --bud-2: #9EE6B9;
+  --bud-3: #FFC93D;
   --shadow: 0 1px 2px rgb(31 45 69 / 0.06), 0 8px 24px rgb(31 45 69 / 0.08);
   --stk: 0 4px 0 var(--ink);
   --display: 'Fredoka', 'Baloo 2', ui-rounded, 'Segoe UI', system-ui, sans-serif;
@@ -321,18 +324,18 @@ textarea.line { min-height: 64px; }
 .creek-larva { position: absolute; left: 14%; bottom: 40px; }
 .drops { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .6s; }
 .creek-scene.raining .drops { opacity: 1; }
-.drops i { position: absolute; top: -20px; width: 2px; height: 16px; border-radius: 2px; background: #fff; opacity: .8; animation: fall 1.2s linear infinite; }
+.drops i { position: absolute; top: -20px; width: 2px; height: 14px; border-radius: 2px; background: #fff; opacity: .75; animation: fall 2s linear infinite; }
 .lightning { position: absolute; inset: 0; background: #fff; animation: flash .7s ease-out both; pointer-events: none; z-index: 2; }
-.water { animation: water 3s ease-in-out infinite; }
+.water { animation: water 5s ease-in-out infinite; }
 .sound-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 .schip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 2px solid var(--line); background: var(--paper); font-weight: 800; color: var(--ink-2); transition: all .3s; }
 .schip.on { border-color: var(--ink); background: var(--sun); color: var(--ink); box-shadow: 0 3px 0 var(--ink); }
 /* Bilateral */
-.bstar { color: #fff; opacity: .25; transition: opacity .15s, transform .15s; z-index: 1; }
+.bstar { color: #fff; opacity: .25; transition: opacity .3s, transform .3s; z-index: 1; }
 .bstar svg { fill: none; }
 .bstar.on { opacity: 1; color: #FFE27A; transform: scale(1.25); }
 .bstar.on svg { fill: #FFE27A; }
-.bil-center { transform: translateX(var(--look, 0)); transition: transform .25s; z-index: 1; }
+.bil-center { transform: translateX(var(--look, 0)); transition: transform .45s ease-in-out; z-index: 1; }
 .twinkle-dot { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff; opacity: .6; animation: twinkle 2.4s ease-in-out infinite; }
 
 /* ---------- Crisis ---------- */
@@ -484,3 +487,8 @@ table.tbl { border-collapse: collapse; width: 100%; font-size: 0.88rem; font-var
 .door-ic.sm { width: 38px; height: 38px; border-width: 2px; }
 .door-h { display: flex; align-items: center; gap: 10px; }
 .tool aside .navi svg { flex: none; }
+/* Marca Green Buddy: la palabra "Green" va en una etiqueta verde con borde, como sticker */
+.wordmark { font-family: var(--display); font-weight: 700; font-size: 2rem; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; line-height: 1; }
+.wordmark.big { font-size: clamp(2.4rem, 7vw, 3.4rem); }
+.wm-green { background: #6BDB8F; border: 3px solid var(--ink); border-radius: 12px; padding: 2px 10px 4px; box-shadow: 0 4px 0 var(--ink); transform: rotate(-2deg); display: inline-block; color: var(--ink); }
+.buddy-hi { margin: 4px 0 0; font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--leaf-deep); }

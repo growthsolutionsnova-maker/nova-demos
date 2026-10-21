@@ -419,16 +419,18 @@ export const crisisKeywords = [
 export const stages = [
   { id: 'larvita', min: 0, name: t('Larvita', 'Little caterpillar', 'Lagartinha') },
   { id: 'larva', min: 4, name: t('Larva que crece', 'Growing caterpillar', 'Lagarta crescendo') },
-  { id: 'capullo', min: 10, name: t('Capullo', 'Cocoon', 'Casulo') },
-  { id: 'capullo_luz', min: 18, name: t('Capullo con luz', 'Glowing cocoon', 'Casulo com luz') },
+  // La mariposa forma una crisálida colgante (el capullo es de las polillas). Corrección de la Dra. Emilia, 21-10.
+  { id: 'capullo', min: 10, name: t('Crisálida', 'Chrysalis', 'Crisálida') },
+  { id: 'capullo_luz', min: 18, name: t('Crisálida con luz', 'Glowing chrysalis', 'Crisálida com luz') },
   { id: 'mariposa', min: 28, name: t('Mariposa', 'Butterfly', 'Borboleta') },
 ];
 
 export function defaultConfig() {
   return JSON.parse(JSON.stringify({
-    version: 2,
+    version: 3,
+    contentRev: 3,
     publishedAt: '2026-10-17T14:00:00Z',
-    note: 'Borrador v2: código de colores, 3 ejercicios y antes/después. Pendiente revisión clínica y teológica.',
+    note: 'Borrador v3: Green Buddy, ritmos más lentos y crisálida. Pendiente revisión clínica y teológica.',
     screens, startScreen, after, rules, insights, validations, actions, actionByEmotion,
     bibleVersions, verses, helplines, crisisCopy, crisisKeywords, stages, colors, suggestions, suggestionRules, suggestionDefaults,
   }));

@@ -1,5 +1,7 @@
 // Sonidos generados en el teléfono con Web Audio: nada se descarga y funciona sin internet.
 // Sonidos de interfaz, respiración, lluvia, riachuelo, trueno y tono bilateral.
+// Volumen general suave (21-10: "el sonido está muy fuerte").
+const MASTER = 0.45;
 
 let ctx = null;
 let master = null;
@@ -7,7 +9,7 @@ const KEY = 'erp.v1.sound';
 export function soundOn() { try { return localStorage.getItem(KEY) !== 'off'; } catch { return true; } }
 export function setSoundOn(on) {
   try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch { /* */ }
-  if (master) master.gain.value = on ? 0.9 : 0;
+  if (master) master.gain.value = on ? MASTER : 0;
 }
 
 function ac() {
@@ -17,7 +19,7 @@ function ac() {
     if (!C) return null;
     ctx = new C();
     master = ctx.createGain();
-    master.gain.value = soundOn() ? 0.9 : 0;
+    master.gain.value = soundOn() ? MASTER : 0;
     master.connect(ctx.destination);
   }
   if (ctx.state === 'suspended') ctx.resume();
@@ -43,10 +45,10 @@ function tone(freq, start, dur, { type = 'sine', vol = 0.18, pan = 0, attack = 0
 // ---------- Interfaz ----------
 export const sfx = {
   tap() { tone(740, 0, 0.08, { vol: 0.08, type: 'triangle' }); haptic(6); },
-  select() { tone(523, 0, 0.12, { vol: 0.12, type: 'triangle' }); tone(784, 0.07, 0.16, { vol: 0.12, type: 'triangle' }); haptic(10); },
+  select() { tone(523, 0, 0.12, { vol: 0.09, type: 'triangle' }); tone(784, 0.07, 0.16, { vol: 0.09, type: 'triangle' }); haptic(10); },
   next() { tone(659, 0, 0.1, { vol: 0.08, type: 'sine' }); },
-  leaf() { [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.09, 0.32, { vol: 0.13, type: 'triangle' })); haptic(20); },
-  grow() { [392, 523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, i * 0.1, 0.45, { vol: 0.13, type: 'triangle' })); haptic(40); },
+  leaf() { [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.09, 0.32, { vol: 0.09, type: 'triangle' })); haptic(20); },
+  grow() { [392, 523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, i * 0.1, 0.45, { vol: 0.09, type: 'triangle' })); haptic(40); },
   soft() { tone(440, 0, 0.5, { vol: 0.07, attack: 0.08 }); },
   wing() { // aleteo suave
     const c = ac(); if (!c) return;
@@ -114,7 +116,7 @@ export function startSoundscape() {
   const lfo = c.createOscillator(); const lfoG = c.createGain();
   lfo.frequency.value = 0.35; lfoG.gain.value = 180; lfo.connect(lfoG); lfoG.connect(creek.f.frequency); lfo.start();
   let thunderCb = () => {};
-  let thunderVol = 0.5;
+  let thunderVol = 0.3;
   let timer = null;
   const thunder = () => {
     const s = noiseSource('brown'); const f = c.createBiquadFilter(); const g = c.createGain();
@@ -124,15 +126,15 @@ export function startSoundscape() {
     g.gain.exponentialRampToValueAtTime(thunderVol * 0.5, t0 + 0.9); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 3.2);
     s.connect(f); f.connect(g); g.connect(out); s.start(t0); s.stop(t0 + 3.4);
     thunderCb();
-    timer = setTimeout(thunder, 5200 + Math.random() * 3000);
+    timer = setTimeout(thunder, 7500 + Math.random() * 3000);
   };
   timer = setTimeout(thunder, 2200);
   return {
     focus(which) { // 'rain' | 'creek' | 'thunder' | 'all'
       const t = c.currentTime;
-      const set = (L, on) => L.g.gain.linearRampToValueAtTime(on ? L.base * 1.9 : L.base * 0.55, t + 0.6);
-      if (which === 'all') { set(rain, true); set(creek, true); thunderVol = 0.6; rain.g.gain.linearRampToValueAtTime(rain.base, t + 0.6); creek.g.gain.linearRampToValueAtTime(creek.base, t + 0.6); return; }
-      set(rain, which === 'rain'); set(creek, which === 'creek'); thunderVol = which === 'thunder' ? 0.85 : 0.35;
+      const set = (L, on) => L.g.gain.linearRampToValueAtTime(on ? L.base * 1.5 : L.base * 0.6, t + 1.2);
+      if (which === 'all') { set(rain, true); set(creek, true); thunderVol = 0.35; rain.g.gain.linearRampToValueAtTime(rain.base, t + 1.2); creek.g.gain.linearRampToValueAtTime(creek.base, t + 1.2); return; }
+      set(rain, which === 'rain'); set(creek, which === 'creek'); thunderVol = which === 'thunder' ? 0.5 : 0.2;
     },
     onThunder(cb) { thunderCb = cb; },
     stop() {
@@ -145,7 +147,7 @@ export function startSoundscape() {
 
 // ---------- Bilateral: tono suave que alterna oído izquierdo / derecho ----------
 export function bilateralPulse(side) { // side: -1 izquierda, 1 derecha
-  tone(side < 0 ? 261.6 : 293.7, 0, 0.42, { vol: 0.16, pan: side, attack: 0.04, type: 'sine' });
+  tone(side < 0 ? 261.6 : 293.7, 0, 0.55, { vol: 0.1, pan: side, attack: 0.06, type: 'sine' });
 }
 
 // ---------- Voz del versículo (sintética, la mejor disponible en el teléfono) ----------

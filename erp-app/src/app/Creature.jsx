@@ -1,4 +1,5 @@
-// La compañera: larvita → larva → capullo → capullo con luz → mariposa.
+// La compañera: larvita → larva → crisálida → crisálida con luz → mariposa (Buddy).
+// Buddy es una mariposa verde, sin rasgos de género (sin pestañas, moños ni labios).
 // Su cara refleja, sutilmente, el último ánimo (nunca se ve "castigada").
 import React from 'react';
 
@@ -80,8 +81,8 @@ function Chrysalis({ glow, mood }) {
         <path d="M120 38 C104 50 96 90 100 130 C102 152 110 164 118 166 C100 160 90 140 90 120 C88 80 98 52 120 38Z" style={{ fill: 'var(--white)', opacity: 0.22 }} />
         {glow && (
           <g style={{ opacity: 0.85 }}>
-            <path d="M100 118 Q120 100 140 118 L136 150 Q120 158 104 150Z" style={f('wing')} />
-            <path d="M108 126 Q120 116 132 126 L130 144 Q120 150 110 144Z" style={f('coral')} />
+            <path d="M100 118 Q120 100 140 118 L136 150 Q120 158 104 150Z" style={f('bud-1')} />
+            <path d="M108 126 Q120 116 132 126 L130 144 Q120 150 110 144Z" style={f('bud-3')} />
           </g>
         )}
         {[96, 106, 116, 126, 136, 146].map((x, i) => <circle key={i} cx={x - 1} cy={70 + Math.abs(i - 2.5) * 1.4} r="2.6" style={f('gold')} />)}
@@ -99,12 +100,12 @@ export function Butterfly({ open = 1, mood = 'bien', flap = true, scale = 1 }) {
   });
   const Wing = () => (
     <g>
-      <path d="M116 104 C82 34 18 30 26 84 C32 120 78 124 116 112Z" style={f('wing')} />
-      <path d="M108 104 C84 58 44 52 46 86 C48 108 80 112 108 108Z" style={f('wing-2')} />
+      <path d="M116 104 C82 34 18 30 26 84 C32 120 78 124 116 112Z" style={f('bud-1')} />
+      <path d="M108 104 C84 58 44 52 46 86 C48 108 80 112 108 108Z" style={f('bud-2')} />
       <circle cx="56" cy="74" r="8" style={f('sun')} />
       <circle cx="78" cy="94" r="5" style={f('white')} />
-      <path d="M116 116 C84 120 52 146 70 172 C86 190 112 154 118 124Z" style={f('coral')} />
-      <circle cx="84" cy="156" r="5" style={f('sun')} />
+      <path d="M116 116 C84 120 52 146 70 172 C86 190 112 154 118 124Z" style={f('bud-3')} />
+      <circle cx="84" cy="156" r="5" style={f('bud-1')} />
     </g>
   );
   return (

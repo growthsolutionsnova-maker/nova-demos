@@ -59,9 +59,9 @@ function Shell({ lang, phase, onStart, onAgain, intro, done, children, compact, 
   );
 }
 
-// ---------- Respirar: 15 % más rápido que antes, 7 respiraciones ≈ 1 minuto ----------
+// ---------- Respirar: un poco más lento (21-10), 6 respiraciones ≈ 1 minuto ----------
 export function Breath({ lang, compact = false, onDone }) {
-  const IN = 3400, OUT = 5100, CYCLES = 7;
+  const IN = 3800, OUT = 5800, CYCLES = 6;
   const [phase, setPhase] = useState('ready'); // ready | in | out | done
   const [cycle, setCycle] = useState(0);
   useEffect(() => {
@@ -91,11 +91,11 @@ export function Breath({ lang, compact = false, onDone }) {
 }
 
 // ---------- Atención: lluvia, riachuelo y trueno (1 minuto) ----------
-// 0–30 s: un sonido a la vez (10 s cada uno) · 30–50 s: cambio cada 5 s · 50–60 s: todos juntos
+// Más pausado (21-10): 0–36 s un sonido a la vez (12 s cada uno) · 36–54 s cambio cada 6 s · 54–60 s todos juntos
 const ORDER = ['rain', 'creek', 'thunder'];
 function focusAt(s) {
-  if (s < 30) return ORDER[Math.floor(s / 10)];
-  if (s < 50) return ['rain', 'thunder', 'creek', 'rain'][Math.floor((s - 30) / 5)];
+  if (s < 36) return ORDER[Math.floor(s / 12)];
+  if (s < 54) return ['rain', 'thunder', 'creek'][Math.floor((s - 36) / 6)];
   return 'all';
 }
 export function Attention({ lang, compact = false, onDone }) {
@@ -125,7 +125,7 @@ export function Attention({ lang, compact = false, onDone }) {
           <path d="M20 148 q20 -6 40 0 M140 150 q20 -6 40 0 M250 152 q20 -6 40 0" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" opacity=".8" className="ripples" />
         </svg>
         <div className="creek-larva"><Creature stage="larvita" size={120} /></div>
-        <div className="drops" aria-hidden>{Array.from({ length: 18 }, (_, i) => <i key={i} style={{ left: `${(i * 37) % 100}%`, animationDelay: `${(i * 0.13) % 1.2}s` }} />)}</div>
+        <div className="drops" aria-hidden>{Array.from({ length: 18 }, (_, i) => <i key={i} style={{ left: `${(i * 37) % 100}%`, animationDelay: `${(i * 0.21) % 2}s` }} />)}</div>
       </div>
       {phase === 'run' && <Ring t={t} total={TOTAL}>{Math.ceil(TOTAL - t)}</Ring>}
       <div className="sound-chips">
@@ -140,7 +140,7 @@ export function Attention({ lang, compact = false, onDone }) {
 
 // ---------- Bilateral: izquierda, derecha (1 minuto) ----------
 export function Bilateral({ lang, compact = false, onDone }) {
-  const TOTAL = 60, STEP = 0.5; // un lado cada medio segundo
+  const TOTAL = 60, STEP = 0.65; // un lado cada 0,65 s (un poco más lento, 21-10)
   const [phase, setPhase] = useState('ready');
   const [t, setT] = useClock(phase === 'run', TOTAL, () => { setPhase('done'); sfx.leaf(); onDone && onDone(); });
   const beat = phase === 'run' ? Math.floor(t / STEP) : -1;

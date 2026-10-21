@@ -106,8 +106,10 @@ function Onboarding({ onDone }) {
   const [research, setResearch] = useState(true);
   if (step === 0) return (
     <div className="screen">
-      <Scene hour={8} stage="larvita" mood="bien" />
+      <Scene hour={8} stage="mariposa" mood="bien" name="Buddy" />
       <div className="center-col">
+        <span className="wordmark" aria-label="Green Buddy"><span className="wm-green">Green</span> Buddy</span>
+        <p className="buddy-hi">{tr(lang, 'brand_hi')}</p>
         <h1 className="hero-title">{tr(lang, 'welcome_title')}</h1>
         <p className="lead">{tr(lang, 'welcome_body')}</p>
         <p className="verse-mini">{tr(lang, 'welcome_verse')}</p>

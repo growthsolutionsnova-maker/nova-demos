@@ -21,7 +21,7 @@ const T = {
     intro: 'El juego diario de emociones y el motor de datos detrás. Elige por dónde entrar.',
     introLive: 'Piloto: el juego diario de emociones y el motor de datos detrás. Elige por dónde entrar.',
     appTitle: 'La app', appWho: 'Para la persona · ES / EN / PT',
-    appBody: 'Check-in de 1 minuto con emojis, preguntas de 1 a 4 opciones, reflexión, parecer, acción y versículo. La larvita crece hasta ser mariposa. Incluye mapa de emociones, respiración SOS y protocolo de crisis.',
+    appBody: 'Check-in de 1 minuto con caritas y colores, preguntas de 1 a 4 opciones, reflexión, parecer, ejercicio y versículo. La larvita crece hasta ser mariposa. Incluye mapa de emociones, 3 ejercicios de 1 minuto y protocolo de crisis.',
     openApp: 'Abrir la app', appNote: 'Se ve mejor en el celular. Sin registro para empezar.',
     admin: 'Edita preguntas, opciones, reglas, versículos y líneas de crisis en ES/EN/PT, sin programar. Publica versiones.',
     dashboard: 'Personas activas, retención, dónde abandonan, qué ayuda y a qué hora entran. Todo agregado.',
@@ -36,7 +36,7 @@ const T = {
     intro: 'The daily feelings game and the data engine behind it. Choose where to go in.',
     introLive: 'Pilot: the daily feelings game and the data engine behind it. Choose where to go in.',
     appTitle: 'The app', appWho: 'For the person · ES / EN / PT',
-    appBody: 'A 1-minute check-in with emojis, questions with 1 to 4 options, reflection, insight, action and Bible verse. The little caterpillar grows into a butterfly. Includes a feelings map, SOS breathing and a crisis protocol.',
+    appBody: 'A 1-minute check-in with faces and colors, questions with 1 to 4 options, reflection, insight, exercise and Bible verse. The little caterpillar grows into a butterfly. Includes a feelings map, three 1-minute exercises and a crisis protocol.',
     openApp: 'Open the app', appNote: 'Best on a phone. No sign-up to start.',
     admin: 'Edit questions, options, rules, verses and crisis lines in ES/EN/PT, with no coding. Publish versions.',
     dashboard: 'Active people, retention, where people drop off, what helps and what time they come in. All aggregated.',
@@ -51,7 +51,7 @@ const T = {
     intro: 'O jogo diário de emoções e o motor de dados por trás. Escolha por onde entrar.',
     introLive: 'Piloto: o jogo diário de emoções e o motor de dados por trás. Escolha por onde entrar.',
     appTitle: 'O app', appWho: 'Para a pessoa · ES / EN / PT',
-    appBody: 'Check-in de 1 minuto com emojis, perguntas de 1 a 4 opções, reflexão, parecer, ação e versículo. A lagartinha cresce até virar borboleta. Inclui mapa de emoções, respiração SOS e protocolo de crise.',
+    appBody: 'Check-in de 1 minuto com carinhas e cores, perguntas de 1 a 4 opções, reflexão, parecer, exercício e versículo. A lagartinha cresce até virar borboleta. Inclui mapa de emoções, 3 exercícios de 1 minuto e protocolo de crise.',
     openApp: 'Abrir o app', appNote: 'Fica melhor no celular. Sem cadastro para começar.',
     admin: 'Edite perguntas, opções, regras, versículos e linhas de crise em ES/EN/PT, sem programar. Publique versões.',
     dashboard: 'Pessoas ativas, retenção, onde desistem, o que ajuda e a que horas entram. Tudo agregado.',
@@ -92,7 +92,8 @@ function Access() {
       <LangSwitch lang={lang} setLang={setLang} />
       <div className="intro">
         <Creature stage="mariposa" size={150} />
-        <h1>Emotional Reconstruction Program</h1>
+        <h1 className="wordmark big" aria-label="Green Buddy"><span className="wm-green">Green</span> Buddy</h1>
+        <span className="muted" style={{ fontWeight: 700 }}>Emotional Reconstruction Program</span>
         <p className="muted" style={{ margin: 0, maxWidth: '58ch' }}>{store.live ? t.introLive : t.intro}</p>
       </div>
       <div className="doors">
@@ -182,7 +183,7 @@ function Gate({ area, children }) {
 
 function Root() {
   const h = useHash();
-  useEffect(() => { document.title = { app: 'App · ERP', admin: 'Admin · ERP', dashboard: 'Dashboard · ERP', lab: 'Lab · ERP' }[h] || 'Emotional Reconstruction Program'; }, [h]);
+  useEffect(() => { document.title = { app: 'Green Buddy', admin: 'Admin · Green Buddy', dashboard: 'Dashboard · Green Buddy', lab: 'Lab · Green Buddy' }[h] || 'Green Buddy'; }, [h]);
   if (h === 'app') return <AppShell />;
   if (h === 'admin') return <Gate area="admin"><Admin /></Gate>;
   if (h === 'dashboard') return <Gate area="dashboard"><Dashboard /></Gate>;

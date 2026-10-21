@@ -19,13 +19,13 @@ export default function ToolShell({ area, sections, section, onSection, children
       <aside>
         <div className="brand">
           <svg viewBox="0 0 48 40" width="40" height="34" aria-hidden>
-            <path d="M23 20 C14 4 1 4 3 14 C4 22 14 23 23 21Z" style={{ fill: 'var(--wing)' }} />
-            <path d="M25 20 C34 4 47 4 45 14 C44 22 34 23 25 21Z" style={{ fill: 'var(--wing)' }} />
-            <path d="M23 22 C15 24 9 31 13 36 C17 39 22 31 23 24Z" style={{ fill: 'var(--coral)' }} />
-            <path d="M25 22 C33 24 39 31 35 36 C31 39 26 31 25 24Z" style={{ fill: 'var(--coral)' }} />
+            <path d="M23 20 C14 4 1 4 3 14 C4 22 14 23 23 21Z" style={{ fill: 'var(--bud-1)' }} />
+            <path d="M25 20 C34 4 47 4 45 14 C44 22 34 23 25 21Z" style={{ fill: 'var(--bud-1)' }} />
+            <path d="M23 22 C15 24 9 31 13 36 C17 39 22 31 23 24Z" style={{ fill: 'var(--bud-3)' }} />
+            <path d="M25 22 C33 24 39 31 35 36 C31 39 26 31 25 24Z" style={{ fill: 'var(--bud-3)' }} />
             <rect x="22" y="12" width="4" height="22" rx="2" style={{ fill: 'var(--ink)' }} />
           </svg>
-          <div><b>Emotional Reconstruction</b><small>{store.live ? tx('Piloto') : tx('Demo fase 1')} · {AREAS().find((a) => a[0] === area)?.[2]}</small></div>
+          <div><b>Green Buddy</b><small>{store.live ? tx('Piloto') : tx('Demo fase 1')} · {AREAS().find((a) => a[0] === area)?.[2]}</small></div>
         </div>
         <div className="segm" role="group" aria-label="Idioma / Language" style={{ alignSelf: 'flex-start', marginBottom: 10 }}>{[['es', 'ES', 'Español'], ['en', 'EN', 'English'], ['pt', 'PT', 'Português']].map(([c, l, full]) => <button key={c} title={full} aria-label={full} className={toolLang() === c ? 'on' : ''} onClick={() => store.setSiteLang(c)} aria-pressed={toolLang() === c}>{l}</button>)}</div>
         {sections.map(([k, e, label, cnt]) => (

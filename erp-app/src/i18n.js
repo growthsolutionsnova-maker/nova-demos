@@ -1,5 +1,6 @@
 // Textos de interfaz de la app (no del contenido clínico, que vive en la configuración).
 const S = {
+  brand_hi: ['Hola, soy Buddy.', "Hi, I'm Buddy.", 'Oi! Eu sou Buddy.'],
   welcome_title: ['Tu corazón también puede transformarse', 'Your heart can be transformed too', 'Seu coração também pode se transformar'],
   welcome_body: ['Un minuto al día para entender lo que sientes, encontrar calma y escuchar a Dios. Tu larvita crecerá contigo.', 'One minute a day to understand what you feel, find calm and hear from God. Your little caterpillar will grow with you.', 'Um minuto por dia para entender o que você sente, encontrar calma e ouvir Deus. Sua lagartinha vai crescer com você.'],
   welcome_verse: ['"Transformaos por la renovación de vuestro entendimiento." Romanos 12:2', '"Be ye transformed by the renewing of your mind." Romans 12:2', '"Transformai-vos pela renovação do vosso entendimento." Romanos 12:2'],
@@ -97,7 +98,7 @@ const S = {
   reminders_note: ['Las notificaciones llegan con la app de iOS y Android.', 'Notifications come with the iOS and Android app.', 'As notificações chegam com o app de iOS e Android.'],
   breath_in: ['Toma aire…', 'Breathe in…', 'Puxe o ar…'],
   breath_out: ['Suéltalo despacio…', 'Let it out slowly…', 'Solte devagar…'],
-  breath_ready: ['Ponte cómodo. Vamos a respirar 7 veces con la mariposa.', "Get comfortable. Let's breathe 7 times with the butterfly.", 'Fique confortável. Vamos respirar 7 vezes com a borboleta.'],
+  breath_ready: ['Ponte cómodo. Vamos a respirar 6 veces con la mariposa.', "Get comfortable. Let's breathe 6 times with the butterfly.", 'Fique confortável. Vamos respirar 6 vezes com a borboleta.'],
   breath_go: ['Empezar', 'Start', 'Começar'],
   breath_done: ['Bien hecho. Tu cuerpo está un poquito más tranquilo.', 'Well done. Your body is a little calmer now.', 'Muito bem. Seu corpo está um pouquinho mais calmo.'],
   breath_again: ['Otra vez', 'Again', 'De novo'],
