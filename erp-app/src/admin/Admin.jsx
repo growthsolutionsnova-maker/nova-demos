@@ -247,6 +247,7 @@ function Verses({ draft, lang, update }) {
       <div className="panel">
         <h2>{tx('Versión bíblica')} ({lang.toUpperCase()})</h2>
         <div className="ctrl"><span className="pill ok">{tx('En uso')}: {v.active}</span><span className="pill warn">{tx('Objetivo')}: {v.target} · {tx('pendiente de licencia')}</span></div>
+        {v.credit && <p className="muted small">{v.credit}</p>}
         <div className="note">{tx(v.license)} {tx('Biblica permite citar hasta 500 versículos sin permiso escrito, con aviso de copyright, pero pide solicitar permiso para uso comercial en apps. Cuando llegue la licencia, se reemplaza el texto aquí y se cambia el nombre de la versión.')}</div>
       </div>
       <div className="panel">

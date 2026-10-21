@@ -3,6 +3,7 @@
 // y teológica. Ningún texto diagnostica: solo da un "parecer".
 
 import { KO } from './ko.js';
+import { OPEN_TEXT, VER, OPEN_VERSIONS } from './bibleOpen.js';
 // Cada texto lleva ko (coreano) desde ko.js; si falta, cae al inglés.
 const t = (es, en, pt) => ({ es, en, pt, ko: KO[es + '|' + en] ?? KO[es] ?? en });
 
@@ -331,13 +332,13 @@ export const actionByEmotion = {
 // Mientras tanto se usan textos de dominio público: Reina-Valera 1909 (ortografía actualizada),
 // King James Version y Almeida (edición de dominio público). Cambiar de versión = editar estos datos.
 export const bibleVersions = {
-  es: { active: 'RV1909', target: 'NVI', license: 'Dominio público. NVI requiere permiso de Biblica.' },
-  en: { active: 'KJV', target: 'NIV', license: 'Dominio público. NIV requiere permiso de Biblica.' },
-  pt: { active: 'Almeida', target: 'NVI', license: 'Dominio público (verificar edición). NVI requiere permiso de Biblica.' },
-  ko: { active: '개역한글', target: '개역한글', license: 'Dominio público en Corea (1961). Confirmar estado en EE. UU. con la Sociedad Bíblica de Corea antes del lanzamiento.' },
+  // Objetivo (lo que pidió la Dra. Emilia): NVI / NIV / NVI-PT con permiso de Biblica.
+  // Mientras tanto: versiones modernas de licencia abierta (ver bibleOpen.js).
+  ...OPEN_VERSIONS,
+  ko: { active: '개역한글', target: '개역한글', credit: '개역한글 (1961), 대한성서공회. 한국에서 저작권 만료.', license: 'Dominio público en Corea (1961). Confirmar estado en EE. UU. con la Sociedad Bíblica de Corea antes del lanzamiento.' },
 };
 
-export const verses = [
+const versesBase = [
   { id: 'rom12_2', ref: t('Romanos 12:2', 'Romans 12:2', 'Romanos 12:2'), emotions: ['paz', 'energia', 'impulsivo'],
     text: t('No os conforméis a este siglo; mas reformaos por la renovación de vuestro entendimiento.', 'Be not conformed to this world: but be ye transformed by the renewing of your mind.', 'Não vos conformeis com este mundo, mas transformai-vos pela renovação do vosso entendimento.'),
     reflection: t('Dios no quiere que solo repitas cosas. Quiere transformarte por dentro, como la larva que se vuelve mariposa.', "God doesn't want you to just repeat things. He wants to change you from the inside, like a caterpillar becoming a butterfly.", 'Deus não quer que você só repita coisas. Ele quer te transformar por dentro, como a lagarta que vira borboleta.') },
@@ -390,6 +391,8 @@ export const verses = [
     text: t('Dad gracias en todo; porque esta es la voluntad de Dios para con vosotros en Cristo Jesús.', 'In every thing give thanks: for this is the will of God in Christ Jesus concerning you.', 'Em tudo dai graças, porque esta é a vontade de Deus em Cristo Jesus para convosco.'),
     reflection: t('Dar gracias abre los ojos a lo bueno que ya está aquí.', 'Giving thanks opens your eyes to the good that is already here.', 'Agradecer abre os olhos para o bem que já está aqui.') },
 ];
+export const verses = versesBase.map((v) => ({ ...v, text: { ...v.text, ...OPEN_TEXT[v.id] }, ...(VER[v.id] ? { ver: VER[v.id] } : {}) }));
+
 
 // ---------- Protocolo de crisis ----------
 // Verificar cada número antes de habilitar un país (fecha en "verified").
@@ -433,7 +436,7 @@ export const stages = [
 export function defaultConfig() {
   return JSON.parse(JSON.stringify({
     version: 3,
-    contentRev: 4,
+    contentRev: 5,
     publishedAt: '2026-10-17T14:00:00Z',
     note: 'Borrador v3: Green Buddy, ritmos más lentos y crisálida. Pendiente revisión clínica y teológica.',
     screens, startScreen, after, rules, insights, validations, actions, actionByEmotion,

@@ -266,7 +266,7 @@ function VerseCard({ config, verse, lang }) {
     <section className="card verse">
       <h3 className="card-k"><Icon name="book" size={20} />{tr(lang, 'verse_for_you')}</h3>
       <div className="verse-text">{L(verse.text, lang)}</div>
-      <div className="verse-ref"><b>{L(verse.ref, lang)}</b><span className="tag">{config.bibleVersions[lang]?.active}</span></div>
+      <div className="verse-ref"><b>{L(verse.ref, lang)}</b><span className="tag">{verse.ver?.[lang] || config.bibleVersions[lang]?.active}</span></div>
       <p className="m0">{L(verse.reflection, lang)}</p>
       <ListenBtn verse={verse} lang={lang} />
     </section>
@@ -820,6 +820,7 @@ function Me({ config, lang, profile, onDeleted }) {
       <div className="card">
         <h3 className="card-k"><Icon name="lock" size={18} />{tr(lang, 'privacy_title')}</h3>
         <span className="small">{tr(lang, 'consent_2')} {tr(lang, 'consent_3')}</span>
+        {config.bibleVersions[lang]?.credit && <span className="small muted">{config.bibleVersions[lang].credit}</span>}
         {!confirm ? <button className="btn small ghost" onClick={() => setConfirm(true)}>{tr(lang, 'delete_data')}</button> : (
           <div className="note warn col">
             {tr(lang, 'delete_confirm')}
