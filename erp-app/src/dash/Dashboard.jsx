@@ -117,7 +117,7 @@ export default function Dashboard() {
       <section id="audiencia" className="grid3">
         <div className="panel"><h2>{tx('País')}</h2><HBars items={byCountry.map(([c, n]) => ({ label: c, value: n }))} /></div>
         <div className="panel"><h2>{tx('Edad')}</h2><HBars items={byAge.map(([c, n]) => ({ label: c.replace('_mas', '+').replace('_', '–'), value: n }))} /></div>
-        <div className="panel"><h2>{tx('Idioma')}</h2><HBars items={byLang.map(([c, n]) => ({ label: { es: 'Español', en: 'English', pt: 'Português' }[c], value: n }))} /></div>
+        <div className="panel"><h2>{tx('Idioma')}</h2><HBars items={byLang.map(([c, n]) => ({ label: { es: 'Español', en: 'English', pt: 'Português', ko: '한국어' }[c], value: n }))} /></div>
       </section>
 
       <section id="seguridad" className="panel">

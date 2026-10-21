@@ -1,3 +1,4 @@
+import { KO_UI, KO_DOW, KO_DOW_SHORT } from './i18n_ko.js';
 // Textos de interfaz de la app (no del contenido clínico, que vive en la configuración).
 const S = {
   brand_hi: ['Hola, soy Buddy.', "Hi, I'm Buddy.", 'Oi! Eu sou Buddy.'],
@@ -156,11 +157,17 @@ const S = {
   end_short: ['Final', 'End', 'Final'],
   you_chose: ['Hoy elegiste', 'Today you chose', 'Hoje você escolheu'],
 
+  flag_demo: ['Demo · contenido en revisión', 'Demo · content under review', 'Demo · conteúdo em revisão'],
+  flag_pilot: ['Piloto · contenido en revisión', 'Pilot · content under review', 'Piloto · conteúdo em revisão'],
+  program_title: ['Sobre el programa', 'About the program', 'Sobre o programa'],
+  levels_msg: ['Los siguientes niveles se abren al inscribirte en el programa. Tienen un costo, y tus puntos te dan descuentos de promoción.', 'The next levels open when you enroll in the program. They have a fee, and your points give you promotional discounts.', 'Os próximos níveis se abrem quando você se inscreve no programa. Eles têm um custo, e seus pontos dão descontos promocionais.'],
+  personal_msg: ['Este programa fue hecho especialmente para usarse en línea, de forma personal.', 'This program was made especially for online, personal use.', 'Este programa foi feito especialmente para uso online e pessoal.'],
 };
-const IDX = { es: 0, en: 1, pt: 2 };
+const IDX = { es: 0, en: 1, pt: 2, ko: 3 };
+export const LANG_IDX = IDX;
 export function tr(lang, key, vars) {
   const row = S[key]; if (!row) return key;
-  let s = row[IDX[lang] ?? 0] ?? row[0];
+  let s = lang === 'ko' ? (KO_UI[key] ?? row[1]) : (row[IDX[lang] ?? 0] ?? row[0]);
   if (vars) for (const [k, v] of Object.entries(vars)) s = s.replace('{' + k + '}', v);
   return s;
 }
@@ -169,11 +176,12 @@ export const DOW = {
   es: ['domingos', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábados'],
   en: ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'],
   pt: ['domingos', 'segundas', 'terças', 'quartas', 'quintas', 'sextas', 'sábados'],
+  ko: KO_DOW,
 };
-export const DOW_SHORT = { es: ['D', 'L', 'M', 'M', 'J', 'V', 'S'], en: ['S', 'M', 'T', 'W', 'T', 'F', 'S'], pt: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'] };
+export const DOW_SHORT = { es: ['D', 'L', 'M', 'M', 'J', 'V', 'S'], en: ['S', 'M', 'T', 'W', 'T', 'F', 'S'], pt: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'], ko: KO_DOW_SHORT };
 export const COUNTRIES = {
-  US: ['Estados Unidos', 'United States', 'Estados Unidos'], MX: ['México', 'Mexico', 'México'], CO: ['Colombia', 'Colombia', 'Colômbia'],
-  BR: ['Brasil', 'Brazil', 'Brasil'], ES: ['España', 'Spain', 'Espanha'], OTHER: ['Otro país', 'Other country', 'Outro país'],
+  US: ['Estados Unidos', 'United States', 'Estados Unidos', '미국'], MX: ['México', 'Mexico', 'México', '멕시코'], CO: ['Colombia', 'Colombia', 'Colômbia', '콜롬비아'],
+  BR: ['Brasil', 'Brazil', 'Brasil', '브라질'], ES: ['España', 'Spain', 'Espanha', '스페인'], KR: ['Corea del Sur', 'South Korea', 'Coreia do Sul', '대한민국'], OTHER: ['Otro país', 'Other country', 'Outro país', '다른 나라'],
 };
 export function guessCountry() {
   try {
@@ -181,6 +189,7 @@ export function guessCountry() {
     if (tz === 'America/Bogota') return 'CO';
     if (tz.startsWith('America/Mexico') || ['America/Monterrey', 'America/Cancun', 'America/Tijuana', 'America/Merida', 'America/Chihuahua'].includes(tz)) return 'MX';
     if (['America/Sao_Paulo', 'America/Fortaleza', 'America/Recife', 'America/Manaus', 'America/Bahia', 'America/Belem'].includes(tz)) return 'BR';
+    if (tz === 'Asia/Seoul') return 'KR';
     if (tz === 'Europe/Madrid' || tz === 'Atlantic/Canary') return 'ES';
     if (['America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'America/Phoenix', 'America/Anchorage', 'Pacific/Honolulu', 'America/Detroit'].includes(tz)) return 'US';
   } catch { /* */ }

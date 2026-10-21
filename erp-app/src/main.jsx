@@ -20,7 +20,7 @@ const T = {
   es: {
     intro: 'El juego diario de emociones y el motor de datos detrás. Elige por dónde entrar.',
     introLive: 'Piloto: el juego diario de emociones y el motor de datos detrás. Elige por dónde entrar.',
-    appTitle: 'La app', appWho: 'Para la persona · ES / EN / PT',
+    appTitle: 'La app', appWho: 'Para la persona · ES / EN / PT / KO',
     appBody: 'Check-in de 1 minuto con caritas y colores, preguntas de 1 a 4 opciones, reflexión, parecer, ejercicio y versículo. La larvita crece hasta ser mariposa. Incluye mapa de emociones, 3 ejercicios de 1 minuto y protocolo de crisis.',
     openApp: 'Abrir la app', appNote: 'Se ve mejor en el celular. Sin registro para empezar.',
     admin: 'Edita preguntas, opciones, reglas, versículos y líneas de crisis en ES/EN/PT, sin programar. Publica versiones.',
@@ -35,7 +35,7 @@ const T = {
   en: {
     intro: 'The daily feelings game and the data engine behind it. Choose where to go in.',
     introLive: 'Pilot: the daily feelings game and the data engine behind it. Choose where to go in.',
-    appTitle: 'The app', appWho: 'For the person · ES / EN / PT',
+    appTitle: 'The app', appWho: 'For the person · ES / EN / PT / KO',
     appBody: 'A 1-minute check-in with faces and colors, questions with 1 to 4 options, reflection, insight, exercise and Bible verse. The little caterpillar grows into a butterfly. Includes a feelings map, three 1-minute exercises and a crisis protocol.',
     openApp: 'Open the app', appNote: 'Best on a phone. No sign-up to start.',
     admin: 'Edit questions, options, rules, verses and crisis lines in ES/EN/PT, with no coding. Publish versions.',
@@ -50,7 +50,7 @@ const T = {
   pt: {
     intro: 'O jogo diário de emoções e o motor de dados por trás. Escolha por onde entrar.',
     introLive: 'Piloto: o jogo diário de emoções e o motor de dados por trás. Escolha por onde entrar.',
-    appTitle: 'O app', appWho: 'Para a pessoa · ES / EN / PT',
+    appTitle: 'O app', appWho: 'Para a pessoa · ES / EN / PT / KO',
     appBody: 'Check-in de 1 minuto com carinhas e cores, perguntas de 1 a 4 opções, reflexão, parecer, exercício e versículo. A lagartinha cresce até virar borboleta. Inclui mapa de emoções, 3 exercícios de 1 minuto e protocolo de crise.',
     openApp: 'Abrir o app', appNote: 'Fica melhor no celular. Sem cadastro para começar.',
     admin: 'Edite perguntas, opções, regras, versículos e linhas de crise em ES/EN/PT, sem programar. Publique versões.',
@@ -61,6 +61,21 @@ const T = {
     footDemo: 'Modo demo: o que você fizer fica salvo só neste navegador. O Dashboard e o Lab mostram também dados simulados (marcados). Conteúdo clínico e bíblico em revisão.',
     demoBtn: 'Ver demonstração (dados simulados)', demoNote: 'Entra com um clique. Só dados de exemplo; não mostra dados de pessoas reais.', realLogin: 'Conta da equipe (dados reais)',
     teamOnly: 'Este acesso é para a equipe.', back: '← Voltar aos acessos', checking: 'Verificando acesso…', noPerm: 'Sua conta não tem permissão para esta seção.',
+  },
+  ko: {
+    intro: '매일 하는 감정 게임과 그 뒤의 데이터 엔진이에요. 들어갈 곳을 고르세요.',
+    introLive: '시범 운영: 매일 하는 감정 게임과 그 뒤의 데이터 엔진이에요. 들어갈 곳을 고르세요.',
+    appTitle: '앱', appWho: '사용자용 · ES / EN / PT / KO',
+    appBody: '얼굴과 색깔로 하는 1분 체크인, 1~4개 선택지 질문, 묵상, 소견, 활동과 성경 말씀. 아기 애벌레가 나비로 자라요. 감정 지도, 1분 활동 3가지, 위기 대응이 들어 있어요.',
+    openApp: '앱 열기', appNote: '휴대폰에서 가장 잘 보여요. 가입 없이 시작해요.',
+    admin: '질문, 선택지, 규칙, 말씀, 위기 전화번호를 코딩 없이 편집하고 버전을 게시해요. (도구 화면은 영어로 표시돼요.)',
+    dashboard: '활동 중인 사람, 재방문, 중단 지점, 도움이 된 것, 들어오는 시간. 모두 합계로만 보여요.',
+    lab: 'χ² 교차 분석, 날짜별 패턴, 코드별 개인 기록, CSV / SPSS 내보내기.',
+    enter: '들어가기:', user: '사용자', pass: '비밀번호', go: '로그인', going: '로그인 중…',
+    footLive: '시범 운영: 답은 이름 대신 코드로 보호된 데이터베이스에 저장돼요. 팀은 이메일과 비밀번호로 들어와요. 상담·성경 내용은 검토 중이에요.',
+    footDemo: '데모 모드: 이 브라우저에만 저장돼요. 대시보드와 랩에는 가상 데이터(표시됨)도 보여요. 상담·성경 내용은 검토 중이에요.',
+    demoBtn: '데모 보기 (가상 데이터)', demoNote: '한 번 클릭으로 들어가요. 예시 데이터만 있고, 실제 사람의 데이터는 보이지 않아요.', realLogin: '팀 계정 (실제 데이터)',
+    teamOnly: '팀 전용 공간이에요.', back: '← 처음으로', checking: '접근 확인 중…', noPerm: '이 계정에는 이 공간에 대한 권한이 없어요.',
   },
 };
 const DOORS = { admin: ['pencil', 'Admin'], dashboard: ['chart', 'Dashboard'], lab: ['flask', 'Lab'] };
@@ -78,7 +93,7 @@ function useSiteLang() {
 function LangSwitch({ lang, setLang }) {
   return (
     <div className="segm" role="group" aria-label="Idioma / Language / Idioma" style={{ alignSelf: 'center' }}>
-      {[['es', 'Español'], ['en', 'English'], ['pt', 'Português']].map(([c, l]) => <button key={c} className={lang === c ? 'on' : ''} onClick={() => setLang(c)} aria-pressed={lang === c}>{l}</button>)}
+      {[['es', 'Español'], ['en', 'English'], ['pt', 'Português'], ['ko', '한국어']].map(([c, l]) => <button key={c} className={lang === c ? 'on' : ''} onClick={() => setLang(c)} aria-pressed={lang === c}>{l}</button>)}
     </div>
   );
 }
@@ -93,7 +108,6 @@ function Access() {
       <div className="intro">
         <Creature stage="mariposa" size={150} />
         <h1 className="wordmark big" aria-label="Green Buddy"><span className="wm-green">Green</span> Buddy</h1>
-        <span className="muted" style={{ fontWeight: 700 }}>Emotional Reconstruction Program</span>
         <p className="muted" style={{ margin: 0, maxWidth: '58ch' }}>{store.live ? t.introLive : t.intro}</p>
       </div>
       <div className="doors">

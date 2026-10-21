@@ -38,8 +38,8 @@
   --bud-3: #FFC93D;
   --shadow: 0 1px 2px rgb(31 45 69 / 0.06), 0 8px 24px rgb(31 45 69 / 0.08);
   --stk: 0 4px 0 var(--ink);
-  --display: 'Fredoka', 'Baloo 2', ui-rounded, 'Segoe UI', system-ui, sans-serif;
-  --body: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --display: 'Fredoka', 'Baloo 2', ui-rounded, 'Segoe UI', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --body: 'Nunito', 'Segoe UI', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, -apple-system, sans-serif;
   --r-lg: 24px;
   --r-md: 16px;
   --r-sm: 10px;
@@ -492,3 +492,7 @@ table.tbl { border-collapse: collapse; width: 100%; font-size: 0.88rem; font-var
 .wordmark.big { font-size: clamp(2.4rem, 7vw, 3.4rem); }
 .wm-green { background: #6BDB8F; border: 3px solid var(--ink); border-radius: 12px; padding: 2px 10px 4px; box-shadow: 0 4px 0 var(--ink); transform: rotate(-2deg); display: inline-block; color: var(--ink); }
 .buddy-hi { margin: 4px 0 0; font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--leaf-deep); }
+
+.program-note { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+body { word-break: keep-all; overflow-wrap: anywhere; }
+.segm button { white-space: nowrap; }

@@ -68,7 +68,8 @@ export default function AppShell() {
 }
 
 function Frame({ children }) {
-  return <div className="stage"><div className="phone"><div className="demo-flag">{store.live ? 'Piloto' : 'Demo'} · contenido en revisión</div>{children}</div></div>;
+  let l = 'es'; try { l = localStorage.getItem('erp.v1.siteLang') || document.documentElement.lang || 'es'; } catch { /* */ }
+  return <div className="stage"><div className="phone"><div className="demo-flag">{tr(l, store.live ? 'flag_pilot' : 'flag_demo')}</div>{children}</div></div>;
 }
 
 function MiniLarva() {
@@ -101,7 +102,7 @@ function TopBar({ lang, onBack, onClose, value, tone }) {
 // ---------------- Onboarding ----------------
 function Onboarding({ onDone }) {
   const [step, setStep] = useState(0);
-  const [lang, setLang] = useState(() => { let l = null; try { l = localStorage.getItem('erp.v1.siteLang'); } catch { /* */ } const n = l || (navigator.language || 'es').slice(0, 2); return ['es', 'en', 'pt'].includes(n) ? n : 'es'; });
+  const [lang, setLang] = useState(() => { let l = null; try { l = localStorage.getItem('erp.v1.siteLang'); } catch { /* */ } const n = l || (navigator.language || 'es').slice(0, 2); return ['es', 'en', 'pt', 'ko'].includes(n) ? n : 'es'; });
   const [ok, setOk] = useState(false);
   const [research, setResearch] = useState(true);
   if (step === 0) return (
@@ -122,9 +123,9 @@ function Onboarding({ onDone }) {
     <div className="screen">
       <TopBar lang={lang} onBack={() => setStep(0)} value={0.33} />
       <h2 className="q-title">{tr(lang, 'choose_lang')}</h2>
-      <div className="options n3">
-        {[['es', 'Español'], ['en', 'English'], ['pt', 'Português']].map(([c, l]) => (
-          <button key={c} className={'opt' + (lang === c ? ' on' : '')} onClick={() => { sfx.select(); setLang(c); setTimeout(() => setStep(2), 220); }}>
+      <div className="options n4">
+        {[['es', 'Español'], ['en', 'English'], ['pt', 'Português'], ['ko', '한국어']].map(([c, l]) => (
+          <button key={c} className={'opt' + (lang === c ? ' on' : '')} onClick={() => { sfx.select(); setLang(c); store.setSiteLang(c); setTimeout(() => setStep(2), 220); }}>
             <span className="opt-ic lang">{c.toUpperCase()}</span><span className="opt-label">{l}</span>
           </button>
         ))}
@@ -136,7 +137,7 @@ function Onboarding({ onDone }) {
       <TopBar lang={lang} onBack={() => setStep(1)} value={0.66} />
       <h2 className="q-title">{tr(lang, 'consent_title')}</h2>
       <div className="card list">
-        {[['book', 'consent_1'], ['lock', 'consent_2'], ['shield', 'consent_3']].map(([ic, k]) => (
+        {[['book', 'consent_1'], ['lock', 'consent_2'], ['shield', 'consent_3'], ['user', 'personal_msg']].map(([ic, k]) => (
           <div key={k} className="li"><span className="li-ic"><Icon name={ic} /></span><span>{tr(lang, k)}</span></div>
         ))}
       </div>
@@ -225,7 +226,7 @@ function CheckIn({ config, lang, profile, onClose, onCrisis, onResult }) {
       <h2 className="q-title" key={sid}>{L(sc.prompt, lang)}</h2>
       {sc.type === 'reflect' ? (
         <>
-          <div className="pause"><span className="dot" aria-hidden /> {lang === 'en' ? 'No rush. Breathe in, breathe out.' : lang === 'pt' ? 'Sem pressa. Puxe o ar, solte o ar.' : 'Sin prisa. Toma aire, suéltalo.'}</div>
+          <div className="pause"><span className="dot" aria-hidden /> {lang === 'ko' ? '천천히 해요. 숨을 들이쉬고, 내쉬어요.' : lang === 'en' ? 'No rush. Breathe in, breathe out.' : lang === 'pt' ? 'Sem pressa. Puxe o ar, solte o ar.' : 'Sin prisa. Toma aire, suéltalo.'}</div>
           <div className="chips">
             {sc.options.map((o) => (
               <button key={o.code} className={'chip' + (chip === o.code ? ' on' : '')} onClick={() => { sfx.tap(); setChip(o.code); }} aria-pressed={chip === o.code}>
@@ -411,6 +412,18 @@ function Summary({ config, lang, run, answers, verse, color, onNext, onCrisis })
 }
 
 // ---------------- Recompensa + personalización temprana ----------------
+// Mensajes de la Dra. Emilia (21-10): niveles con inscripción y uso personal en línea.
+// Solo en "Yo" y al llegar a crisálida; nunca durante el check-in. Sin urgencia ni botón de compra.
+function ProgramNote({ lang }) {
+  return (
+    <div className="card program-note">
+      <h3 className="card-k"><Icon name="sparkle" size={18} />{tr(lang, 'program_title')}</h3>
+      <span className="small">{tr(lang, 'levels_msg')}</span>
+      <span className="small muted">{tr(lang, 'personal_msg')}</span>
+    </div>
+  );
+}
+
 function Reward({ config, lang, run, profile, onHome }) {
   const sessions = store.mySessions();
   const leaves = leavesFrom(sessions);
@@ -437,6 +450,7 @@ function Reward({ config, lang, run, profile, onHome }) {
         <div className="leafbar"><span className="num">{now.leaves}</span><div className="track"><i style={{ width: `${now.progress * 100}%` }} /></div><span>{now.next.min - now.leaves} {tr(lang, 'leaves_to_grow')}</span></div>
       ) : <p className="muted">{tr(lang, 'fully_grown')}</p>}
       {often && <div className="card"><span>{tr(lang, 'often_note')}</span></div>}
+      {grew && now.stage.id === 'capullo' && <ProgramNote lang={lang} />}
       <button className="btn wide" onClick={() => { sfx.next(); needsSetup ? setSetup(0) : onHome(); }}>{needsSetup ? tr(lang, 'continue') : tr(lang, 'go_home')}</button>
       <div style={{ flex: 1 }} />
       {dock}
@@ -503,7 +517,7 @@ function Crisis({ config, lang, profile, reason, onHome, onBreathe }) {
       {reason === 'me_hacen_dano' && <div className="card li"><span className="li-ic"><Icon name="hand" /></span><span>{L(config.crisisCopy.abuse, lang)}</span></div>}
       {h.number ? (
         <div className="helpline">
-          <span className="muted">{L(h.name, lang)} · {COUNTRIES[country]?.[{ es: 0, en: 1, pt: 2 }[lang]]}</span>
+          <span className="muted">{L(h.name, lang)} · {COUNTRIES[country]?.[{ es: 0, en: 1, pt: 2, ko: 3 }[lang]]}</span>
           <span className="number num">{h.number}</span>
           <div className="row">
             <a className="btn" href={`tel:${h.number.replace(/\s/g, '')}`}><Icon name="phone" size={20} />{tr(lang, 'call')}</a>
@@ -514,7 +528,7 @@ function Crisis({ config, lang, profile, reason, onHome, onBreathe }) {
       ) : <div className="helpline"><span>{tr(lang, 'crisis_other')}</span></div>}
       <div className="card li"><span className="li-ic"><Icon name="chat" /></span><span>{L(config.crisisCopy.trusted, lang)}</span></div>
       <details>
-        <summary className="muted">{lang === 'en' ? 'Other countries' : lang === 'pt' ? 'Outros países' : 'Otros países'}</summary>
+        <summary className="muted">{lang === 'ko' ? '다른 나라' : lang === 'en' ? 'Other countries' : lang === 'pt' ? 'Outros países' : 'Otros países'}</summary>
         <ul>{others.map(([c, x]) => <li key={c}>{COUNTRIES[c]?.[0]}: <b className="num">{x.number}</b> · {L(x.name, lang)}</li>)}</ul>
       </details>
       <div style={{ flex: 1 }} />
@@ -663,7 +677,7 @@ function MapView({ config, lang }) {
   const today = new Date();
   const first = new Date(today.getFullYear(), today.getMonth(), 1);
   const nDays = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-  const monthName = today.toLocaleDateString({ es: 'es', en: 'en', pt: 'pt-BR' }[lang], { month: 'long', year: 'numeric' });
+  const monthName = today.toLocaleDateString({ es: 'es', en: 'en', pt: 'pt-BR', ko: 'ko-KR' }[lang], { month: 'long', year: 'numeric' });
   const cells = [];
   for (let i = 0; i < first.getDay(); i++) cells.push(<div key={'e' + i} className="d empty" />);
   for (let d = 1; d <= nDays; d++) {
@@ -774,10 +788,10 @@ function Me({ config, lang, profile, onDeleted }) {
         <div className="field"><label htmlFor="me-name">{tr(lang, 'name_title')}</label>
           <input id="me-name" className="line" defaultValue={profile.avatarName || ''} maxLength={20} onBlur={(e) => store.updateProfile(profile.pid, { avatarName: e.target.value.trim() })} placeholder={tr(lang, 'name_ph')} /></div>
         <div className="field"><label>{tr(lang, 'language')}</label>
-          <div className="seg">{[['es', 'Español'], ['en', 'English'], ['pt', 'Português']].map(([c, l]) => <button key={c} className={lang === c ? 'on' : ''} onClick={() => { sfx.tap(); store.updateProfile(profile.pid, { lang: c }); store.setSiteLang(c); }}>{l}</button>)}</div></div>
+          <div className="seg">{[['es', 'Español'], ['en', 'English'], ['pt', 'Português'], ['ko', '한국어']].map(([c, l]) => <button key={c} className={lang === c ? 'on' : ''} onClick={() => { sfx.tap(); store.updateProfile(profile.pid, { lang: c }); store.setSiteLang(c); }}>{l}</button>)}</div></div>
         <div className="field"><label htmlFor="me-country">{tr(lang, 'country')}</label>
           <select id="me-country" className="line" value={profile.country || 'OTHER'} onChange={(e) => store.updateProfile(profile.pid, { country: e.target.value })}>
-            {Object.entries(COUNTRIES).map(([c, n]) => <option key={c} value={c}>{n[{ es: 0, en: 1, pt: 2 }[lang]]}</option>)}
+            {Object.entries(COUNTRIES).map(([c, n]) => <option key={c} value={c}>{n[{ es: 0, en: 1, pt: 2, ko: 3 }[lang]]}</option>)}
           </select></div>
         <div className="field"><label>{tr(lang, 'reminders')}</label>
           <div className="seg">{['ambos', 'manana', 'noche', 'ninguno'].map((c) => <button key={c} className={profile.reminder === c ? 'on' : ''} onClick={() => store.updateProfile(profile.pid, { reminder: c })}>{tr(lang, 'reminder_' + c)}</button>)}</div>
@@ -802,6 +816,7 @@ function Me({ config, lang, profile, onDeleted }) {
           ))}
         </div>
       </div>
+      <ProgramNote lang={lang} />
       <div className="card">
         <h3 className="card-k"><Icon name="lock" size={18} />{tr(lang, 'privacy_title')}</h3>
         <span className="small">{tr(lang, 'consent_2')} {tr(lang, 'consent_3')}</span>

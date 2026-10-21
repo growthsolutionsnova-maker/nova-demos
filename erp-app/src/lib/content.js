@@ -2,7 +2,9 @@
 // Estado: BORRADOR v1 escrito por el equipo de producto, pendiente de revisión clínica (Dra. Emilia)
 // y teológica. Ningún texto diagnostica: solo da un "parecer".
 
-const t = (es, en, pt) => ({ es, en, pt });
+import { KO } from './ko.js';
+// Cada texto lleva ko (coreano) desde ko.js; si falta, cae al inglés.
+const t = (es, en, pt) => ({ es, en, pt, ko: KO[es + '|' + en] ?? KO[es] ?? en });
 
 // ---------- Pantallas del flujo (grafo) ----------
 // type: 'choice' (1–4 opciones) | 'reflect' (pausa + nombrar + línea opcional)
@@ -332,6 +334,7 @@ export const bibleVersions = {
   es: { active: 'RV1909', target: 'NVI', license: 'Dominio público. NVI requiere permiso de Biblica.' },
   en: { active: 'KJV', target: 'NIV', license: 'Dominio público. NIV requiere permiso de Biblica.' },
   pt: { active: 'Almeida', target: 'NVI', license: 'Dominio público (verificar edición). NVI requiere permiso de Biblica.' },
+  ko: { active: '개역한글', target: '개역한글', license: 'Dominio público en Corea (1961). Confirmar estado en EE. UU. con la Sociedad Bíblica de Corea antes del lanzamiento.' },
 };
 
 export const verses = [
@@ -396,6 +399,7 @@ export const helplines = {
   CO: { name: t('Línea 192, opción 4 (salud mental)', 'Line 192, option 4 (mental health)', 'Linha 192, opção 4 (saúde mental)'), number: '192', emergency: '123', verified: '2026-10-17' },
   BR: { name: t('CVV – Centro de Valorización de la Vida', 'CVV – Centro de Valorização da Vida', 'CVV – Centro de Valorização da Vida'), number: '188', emergency: '192', verified: 'pendiente' },
   ES: { name: t('Línea 024 de atención a la conducta suicida', '024 Suicide Prevention Line', 'Linha 024 de prevenção ao suicídio'), number: '024', emergency: '112', verified: 'pendiente' },
+  KR: { name: t('Línea de prevención del suicidio 109 (24 horas)', 'Suicide prevention line 109 (24 hours)', 'Linha de prevenção do suicídio 109 (24 horas)'), number: '109', emergency: '119', verified: '2026-10-21' },
   OTHER: { name: t('Número de emergencias de tu país', 'Your local emergency number', 'Número de emergência do seu país'), number: '', emergency: '', verified: '—' },
 };
 
@@ -412,6 +416,7 @@ export const crisisKeywords = [
   'suicid', 'matarme', 'quitarme la vida', 'no quiero vivir', 'quiero morir', 'hacerme daño', 'cortarme', 'me pega', 'me golpea', 'abusa',
   'kill myself', 'end my life', 'want to die', 'hurt myself', 'cut myself', 'hits me', 'abuse',
   'me matar', 'tirar minha vida', 'quero morrer', 'me machucar', 'me cortar', 'me bate', 'abusa de mim',
+  '자살', '죽고 싶', '살고 싶지 않', '자해', '나를 해치', '때려', '학대',
 ];
 
 // ---------- Metamorfosis ----------
@@ -428,7 +433,7 @@ export const stages = [
 export function defaultConfig() {
   return JSON.parse(JSON.stringify({
     version: 3,
-    contentRev: 3,
+    contentRev: 4,
     publishedAt: '2026-10-17T14:00:00Z',
     note: 'Borrador v3: Green Buddy, ritmos más lentos y crisálida. Pendiente revisión clínica y teológica.',
     screens, startScreen, after, rules, insights, validations, actions, actionByEmotion,

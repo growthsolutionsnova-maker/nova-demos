@@ -43,7 +43,7 @@ export function codebook(config, lang = 'es') {
     { id: 'fase_mes', label: tx('Parte del mes'), group: 'Tiempo', get: (s) => (s.dom <= 1 || s.dom >= 27 ? 'fin' : s.dom <= 10 ? 'inicio' : 'medio'), values: [{ code: 'inicio', label: tx('Días 2–10') }, { code: 'medio', label: tx('Días 11–26') }, { code: 'fin', label: tx('Días 27–1') }] },
     { id: 'pais', label: tx('País'), group: 'Perfil', profile: true, get: (s, p) => p?.country ?? null, values: ['CO', 'MX', 'US', 'BR', 'ES', 'OTHER'].map((c) => ({ code: c, label: c })) },
     { id: 'edad', label: tx('Rango de edad'), group: 'Perfil', profile: true, get: (s, p) => p?.age ?? null, values: [{ code: '13_17', label: '13–17' }, { code: '18_29', label: '18–29' }, { code: '30_49', label: '30–49' }, { code: '50_mas', label: '50+' }] },
-    { id: 'idioma', label: tx('Idioma'), group: 'Perfil', profile: true, get: (s, p) => p?.lang ?? null, values: [{ code: 'es', label: 'Español' }, { code: 'en', label: 'English' }, { code: 'pt', label: 'Português' }] },
+    { id: 'idioma', label: tx('Idioma'), group: 'Perfil', profile: true, get: (s, p) => p?.lang ?? null, values: [{ code: 'es', label: 'Español' }, { code: 'en', label: 'English' }, { code: 'pt', label: 'Português' }, { code: 'ko', label: '한국어' }] },
   ];
 }
 

@@ -153,8 +153,8 @@ export function bilateralPulse(side) { // side: -1 izquierda, 1 derecha
 // ---------- Voz del versículo (sintética, la mejor disponible en el teléfono) ----------
 export function pickVoice(lang) {
   try {
-    const want = { es: 'es', en: 'en', pt: 'pt' }[lang] || 'es';
-    const pref = { es: ['es-US', 'es-MX', 'es-419', 'es-ES'], en: ['en-US', 'en-GB'], pt: ['pt-BR', 'pt-PT'] }[lang] || [];
+    const want = { es: 'es', en: 'en', pt: 'pt', ko: 'ko' }[lang] || 'es';
+    const pref = { es: ['es-US', 'es-MX', 'es-419', 'es-ES'], en: ['en-US', 'en-GB'], pt: ['pt-BR', 'pt-PT'], ko: ['ko-KR'] }[lang] || [];
     const voices = window.speechSynthesis.getVoices().filter((v) => v.lang && v.lang.toLowerCase().startsWith(want));
     const score = (v) => {
       let s = 0; const n = v.name.toLowerCase();
@@ -171,7 +171,7 @@ export function speak(text, lang, onEnd) {
   try {
     const u = new SpeechSynthesisUtterance(text);
     const v = pickVoice(lang); if (v) u.voice = v;
-    u.lang = v?.lang || { es: 'es-419', en: 'en-US', pt: 'pt-BR' }[lang];
+    u.lang = v?.lang || { es: 'es-419', en: 'en-US', pt: 'pt-BR', ko: 'ko-KR' }[lang];
     u.rate = 0.9; u.pitch = 1;
     u.onend = onEnd; u.onerror = onEnd;
     window.speechSynthesis.cancel();

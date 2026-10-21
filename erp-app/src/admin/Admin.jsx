@@ -7,7 +7,7 @@ import ToolShell from '../ToolShell.jsx';
 import { tx, toolLang, locale } from '../tx.js';
 import { Icon, Face, iconFor, exprForEmotion, exprForMood, ICON_NAMES } from '../app/icons.jsx';
 
-const LANGS = [['es', 'Español'], ['en', 'English'], ['pt', 'Português']];
+const LANGS = [['es', 'Español'], ['en', 'English'], ['pt', 'Português'], ['ko', '한국어']];
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
 function order(cfg) {

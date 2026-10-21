@@ -78,3 +78,11 @@ test('antes/después y siempre 3 sugerencias', () => {
   assert.equal(suggestFor(cfg, { animo: 'mal' }).length, 3);
   assert.deepEqual(suggestFor(cfg, { animo: 'mal', sueno: 'mal', comida: 'no', tema: 'dinero' }), ['dormir', 'comer', 'una_cosa']);
 });
+
+test('coreano: contenido completo, crisis y línea 109', () => {
+  const c = defaultConfig();
+  assert.equal(c.helplines.KR.number, '109');
+  assert.equal(detectCrisis(c, '요즘 죽고 싶어요'), true);
+  assert.equal(detectCrisis(c, '오늘은 좋아요'), false);
+  assert.ok(c.verses.every((v) => v.text.ko && v.text.ko !== v.text.en));
+});

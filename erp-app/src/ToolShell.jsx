@@ -27,7 +27,7 @@ export default function ToolShell({ area, sections, section, onSection, children
           </svg>
           <div><b>Green Buddy</b><small>{store.live ? tx('Piloto') : tx('Demo fase 1')} · {AREAS().find((a) => a[0] === area)?.[2]}</small></div>
         </div>
-        <div className="segm" role="group" aria-label="Idioma / Language" style={{ alignSelf: 'flex-start', marginBottom: 10 }}>{[['es', 'ES', 'Español'], ['en', 'EN', 'English'], ['pt', 'PT', 'Português']].map(([c, l, full]) => <button key={c} title={full} aria-label={full} className={toolLang() === c ? 'on' : ''} onClick={() => store.setSiteLang(c)} aria-pressed={toolLang() === c}>{l}</button>)}</div>
+        <div className="segm" role="group" aria-label="Idioma / Language" style={{ alignSelf: 'flex-start', marginBottom: 10 }}>{[['es', 'ES', 'Español'], ['en', 'EN', 'English'], ['pt', 'PT', 'Português'], ['ko', 'KO', '한국어']].map(([c, l, full]) => <button key={c} title={full} aria-label={full} className={toolLang() === c ? 'on' : ''} onClick={() => store.setSiteLang(c)} aria-pressed={toolLang() === c}>{l}</button>)}</div>
         {sections.map(([k, e, label, cnt]) => (
           <button key={k} className={'navi' + (section === k ? ' on' : '')} onClick={() => onSection(k)} aria-current={section === k}>
             <Ic e={e} />{label}{cnt != null && <span className="cnt">{cnt}</span>}

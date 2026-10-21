@@ -75,7 +75,7 @@ export function localDate(d) {
 export function validateConfig(config) {
   const issues = [];
   const ids = new Set(Object.keys(config.screens));
-  const langs = ['es', 'en', 'pt'];
+  const langs = ['es', 'en', 'pt', 'ko'];
   for (const [id, s] of Object.entries(config.screens)) {
     if (!s.options || s.options.length < 1) issues.push({ level: 'error', where: id, msg: tx('La pantalla no tiene opciones.') });
     if (s.options && s.options.length > 4) issues.push({ level: 'error', where: id, msg: tx('Máximo 4 opciones por pantalla.') });
