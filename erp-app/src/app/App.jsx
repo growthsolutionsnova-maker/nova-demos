@@ -12,6 +12,10 @@ export function useStore() { return useSyncExternalStore(store.subscribe, store.
 
 const HARD = ['mal', 'muy_mal'];
 const MOOD_FACE = '#FFF1CC';
+// Colores del recorrido (23-10): cada opción tiene su color; el color siempre va con palabra y carita/ícono.
+const MOOD_TINT = { bien: '#3DBE74', regular: '#F2B92F', mal: '#4A9BEA', muy_mal: '#9468EE' };
+const moodHex = (code) => MOOD_TINT[code] || MOOD_FACE;
+const PLAY = ['#4A9BEA', '#F2B92F', '#9468EE', '#FF8A3D', '#EE6FA8', '#2EC4B6']; // sin verde: el verde significa "Bien"
 const creatureMood = (animo) => (animo === 'bien' ? 'bien' : animo === 'regular' ? 'regular' : 'soft');
 const hexOf = (config, color) => config.colors?.[color]?.hex || '#C9D2DC';
 
@@ -154,12 +158,12 @@ function Onboarding({ onDone }) {
 }
 
 // ---------------- Opción (carita de color, carita neutra o ícono) ----------------
-function OptionCard({ config, sc, o, lang, picked, onPick, danger }) {
+function OptionCard({ config, sc, o, lang, picked, onPick, danger, index = 0 }) {
   let art;
   if (sc.key === 'emocion') art = <Face expr={exprForEmotion(o.code)} color={hexOf(config, o.color)} size={60} />;
-  else if (sc.key === 'animo' || sc.key === 'animo_final') art = <Face expr={exprForMood(o.code)} color={MOOD_FACE} size={60} />;
+  else if (sc.key === 'animo' || sc.key === 'animo_final') art = <Face expr={exprForMood(o.code)} color={moodHex(o.code)} size={60} />;
   else art = <span className="opt-ic"><Icon name={iconFor(sc.key, o)} size={30} /></span>;
-  const tint = sc.key === 'emocion' ? hexOf(config, o.color) : null;
+  const tint = sc.key === 'emocion' ? hexOf(config, o.color) : (sc.key === 'animo' || sc.key === 'animo_final') ? moodHex(o.code) : danger ? '#EE6FA8' : PLAY[index % PLAY.length];
   return (
     <button className={'opt' + (picked === o.code ? ' on' : '') + (danger ? ' danger' : '')} style={tint ? { '--tint': tint } : null}
       onClick={() => onPick(o.code)} disabled={!!picked}>
@@ -220,7 +224,7 @@ function CheckIn({ config, lang, profile, onClose, onCrisis, onResult }) {
 
   if (!sc) return <div className="screen center"><p>Pantalla "{sid}" no encontrada en el flujo.</p><button className="btn" onClick={onClose}>OK</button></div>;
   return (
-    <div className="screen">
+    <div className="screen step-bg" style={{ '--step': PLAY[(stack.length - 1) % PLAY.length] }}>
       <TopBar lang={lang} onBack={stack.length > 1 ? () => setStack((s) => s.slice(0, -1)) : null} onClose={onClose} value={progress} />
       {stack.length === 1 && <div className="q-greet">{greet}</div>}
       <h2 className="q-title" key={sid}>{L(sc.prompt, lang)}</h2>
@@ -228,8 +232,8 @@ function CheckIn({ config, lang, profile, onClose, onCrisis, onResult }) {
         <>
           <div className="pause"><span className="dot" aria-hidden /> {lang === 'ko' ? '천천히 해요. 숨을 들이쉬고, 내쉬어요.' : lang === 'en' ? 'No rush. Breathe in, breathe out.' : lang === 'pt' ? 'Sem pressa. Puxe o ar, solte o ar.' : 'Sin prisa. Toma aire, suéltalo.'}</div>
           <div className="chips">
-            {sc.options.map((o) => (
-              <button key={o.code} className={'chip' + (chip === o.code ? ' on' : '')} onClick={() => { sfx.tap(); setChip(o.code); }} aria-pressed={chip === o.code}>
+            {sc.options.map((o, i) => (
+              <button key={o.code} style={{ '--tint': PLAY[i % PLAY.length] }} className={'chip' + (chip === o.code ? ' on' : '')} onClick={() => { sfx.tap(); setChip(o.code); }} aria-pressed={chip === o.code}>
                 <span className="chip-ic"><Icon name={iconFor(sc.key, o)} size={22} /></span>{L(o.label, lang)}
               </button>
             ))}
@@ -242,7 +246,7 @@ function CheckIn({ config, lang, profile, onClose, onCrisis, onResult }) {
         </>
       ) : (
         <div className={'options n' + sc.options.length}>
-          {sc.options.map((o) => <OptionCard key={o.code} config={config} sc={sc} o={o} lang={lang} picked={picked} onPick={choose} danger={sc.safety && o.next === '@crisis'} />)}
+          {sc.options.map((o, i) => <OptionCard key={o.code} index={i} config={config} sc={sc} o={o} lang={lang} picked={picked} onPick={choose} danger={sc.safety && o.next === '@crisis'} />)}
         </div>
       )}
     </div>
@@ -313,12 +317,12 @@ function ResultFlow({ config, lang, run, onFinish, onCrisis }) {
   if (step !== 'result') {
     const q = config.after[step];
     return (
-      <div className="screen with-dock">
+      <div className="screen with-dock step-bg" style={{ '--step': PLAY[(step + 2) % PLAY.length] }}>
         <TopBar lang={lang} value={prog} />
         <h2 className="q-title">{L(q.prompt, lang)}</h2>
         <div className={'options n' + q.options.length}>
-          {q.options.map((o) => (
-            <OptionCard key={o.code} config={config} sc={{ key: q.key }} o={o} lang={lang} picked={answers[q.key]} onPick={(code) => {
+          {q.options.map((o, i) => (
+            <OptionCard key={o.code} index={i} config={config} sc={{ key: q.key }} o={o} lang={lang} picked={answers[q.key]} onPick={(code) => {
               sfx.select();
               const sess = { sid: run.sid, pid: store.getMe() };
               store.recordAnswer(sess, '@' + step, q.key, code, Date.now() - shown.current, config.version);
@@ -384,13 +388,13 @@ function Summary({ config, lang, run, answers, verse, color, onNext, onCrisis })
       <div className="ba">
         <div className="ba-col">
           <span className="ba-k">{tr(lang, 'started')}</span>
-          {emo ? <Face expr={exprForEmotion(emo.code)} color={hexOf(config, color)} size={76} /> : <Face expr={exprForMood(before)} color={MOOD_FACE} size={76} />}
+          {emo ? <Face expr={exprForEmotion(emo.code)} color={hexOf(config, color)} size={76} /> : <Face expr={exprForMood(before)} color={moodHex(before)} size={76} />}
           <b>{emo ? L(emo.label, lang) : moodLabel(before)}</b>
         </div>
         <span className={'ba-arrow ' + (ch || '')}><Icon name="arrowRight" size={30} stroke={2.6} /></span>
         <div className="ba-col">
           <span className="ba-k">{tr(lang, 'now_label')}</span>
-          <Face expr={exprForMood(after)} color={MOOD_FACE} size={76} />
+          <Face expr={exprForMood(after)} color={moodHex(after)} size={76} />
           <b>{moodLabel(after)}</b>
         </div>
       </div>
@@ -716,7 +720,7 @@ function MapView({ config, lang }) {
             <div key={s.sid} className="wk-row">
               <span className="wk-day">{DOW_SHORT[lang][d.getDay()]}<small className="num">{d.getDate()}</small></span>
               <Face expr={s.answers.emocion ? exprForEmotion(s.answers.emocion) : exprForMood(s.answers.animo)} color={hexOf(config, c || 'verde')} size={34} />
-              {s.answers.animo_final ? <><span className={'ba-arrow mini ' + (ch || '')}><Icon name="arrowRight" size={18} stroke={2.6} /></span><Face expr={exprForMood(s.answers.animo_final)} color={MOOD_FACE} size={34} /></> : <span className="wk-gap" />}
+              {s.answers.animo_final ? <><span className={'ba-arrow mini ' + (ch || '')}><Icon name="arrowRight" size={18} stroke={2.6} /></span><Face expr={exprForMood(s.answers.animo_final)} color={moodHex(s.answers.animo_final)} size={34} /></> : <span className="wk-gap" />}
               <span className="wk-verse"><Icon name="book" size={16} />{v ? L(v.ref, lang) : '—'}</span>
             </div>
           );
