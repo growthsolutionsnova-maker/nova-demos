@@ -110,11 +110,12 @@ export function startSoundscape() {
     s.connect(f); f.connect(g); g.connect(out); s.start();
     return { s, f, g, base: vol };
   };
-  const rain = layer('pink', 'highpass', 1400, 0.4, 0.10);
-  const creek = layer('brown', 'bandpass', 520, 0.9, 0.22);
-  // el riachuelo "burbujea" con una modulación lenta
+  // 23-10: la lluvia manda; el riachuelo va más bajo y más lento, de fondo.
+  const rain = layer('pink', 'highpass', 1100, 0.4, 0.17);
+  const creek = layer('brown', 'bandpass', 420, 0.8, 0.09);
+  // el riachuelo "burbujea" con una modulación muy lenta
   const lfo = c.createOscillator(); const lfoG = c.createGain();
-  lfo.frequency.value = 0.35; lfoG.gain.value = 180; lfo.connect(lfoG); lfoG.connect(creek.f.frequency); lfo.start();
+  lfo.frequency.value = 0.12; lfoG.gain.value = 90; lfo.connect(lfoG); lfoG.connect(creek.f.frequency); lfo.start();
   let thunderCb = () => {};
   let thunderVol = 0.3;
   let timer = null;

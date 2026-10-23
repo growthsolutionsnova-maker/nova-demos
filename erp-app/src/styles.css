@@ -334,7 +334,7 @@ textarea.line { min-height: 64px; }
 .creek-scene.raining .drops { opacity: 1; }
 .drops i { position: absolute; top: -20px; width: 2px; height: 14px; border-radius: 2px; background: #fff; opacity: .75; animation: fall 2s linear infinite; }
 .lightning { position: absolute; inset: 0; background: #fff; animation: flash .7s ease-out both; pointer-events: none; z-index: 2; }
-.water { animation: water 5s ease-in-out infinite; }
+.water { animation: water 9s ease-in-out infinite; }
 .sound-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 .schip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 2px solid var(--line); background: var(--paper); font-weight: 800; color: var(--ink-2); transition: all .3s; }
 .schip.on { border-color: var(--ink); background: var(--sun); color: var(--ink); box-shadow: 0 3px 0 var(--ink); }
